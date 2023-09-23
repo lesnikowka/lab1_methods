@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Collections;
 
 namespace lab1_dotnet_framework
 {
@@ -24,6 +25,10 @@ namespace lab1_dotnet_framework
         private TaskType SelectedTask = TaskType.Main1;
 
         Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
+
+        Dictionary<Tuple<double, double>, ArrayList> testData;
+        Dictionary<Tuple<double, double>, ArrayList> main1Data;
+        Dictionary<Tuple<double, double>, ArrayList> main2Data;
 
         public Form1()
         {
@@ -153,7 +158,6 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Тестовая";
             SelectedTask = TaskType.Test;
             this.chart1.Series.Clear();
-            checkBox1.Enabled = false;
         }
 
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -161,14 +165,12 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
             SelectedTask = TaskType.Main1;
             this.chart1.Series.Clear();
-            checkBox1.Enabled = true;
         }
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 2";
             SelectedTask = TaskType.Main2;
             this.chart1.Series.Clear();
-            checkBox1.Enabled = true;
         }
 
         private double TrueSoluitonFunction(double X0, double U0)
@@ -194,6 +196,8 @@ namespace lab1_dotnet_framework
 
         }
 
-        
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
     }
 }
