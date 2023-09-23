@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -52,6 +52,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
+            this.dsaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,11 +60,11 @@
             // chart1
             // 
             this.chart1.BackColor = System.Drawing.SystemColors.Control;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(621, 69);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(606, 36);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(700, 298);
             this.chart1.TabIndex = 0;
@@ -72,7 +73,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(621, 385);
+            this.button1.Location = new System.Drawing.Point(624, 341);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(180, 38);
             this.button1.TabIndex = 1;
@@ -82,7 +83,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(807, 385);
+            this.button2.Location = new System.Drawing.Point(820, 341);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(117, 38);
             this.button2.TabIndex = 2;
@@ -139,6 +140,7 @@
             this.menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dsaToolStripMenuItem,
             this.выборТипаЗадачиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -152,20 +154,20 @@
             this.тестоваяToolStripMenuItem,
             this.основнаяToolStripMenuItem});
             this.выборТипаЗадачиToolStripMenuItem.Name = "выборТипаЗадачиToolStripMenuItem";
-            this.выборТипаЗадачиToolStripMenuItem.Size = new System.Drawing.Size(185, 29);
-            this.выборТипаЗадачиToolStripMenuItem.Text = "Выбор типа задачи";
+            this.выборТипаЗадачиToolStripMenuItem.Size = new System.Drawing.Size(109, 29);
+            this.выборТипаЗадачиToolStripMenuItem.Text = "Основная";
             // 
             // тестоваяToolStripMenuItem
             // 
             this.тестоваяToolStripMenuItem.Name = "тестоваяToolStripMenuItem";
-            this.тестоваяToolStripMenuItem.Size = new System.Drawing.Size(195, 34);
+            this.тестоваяToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.тестоваяToolStripMenuItem.Text = "Тестовая";
             this.тестоваяToolStripMenuItem.Click += new System.EventHandler(this.тестоваяToolStripMenuItem_Click);
             // 
             // основнаяToolStripMenuItem
             // 
             this.основнаяToolStripMenuItem.Name = "основнаяToolStripMenuItem";
-            this.основнаяToolStripMenuItem.Size = new System.Drawing.Size(195, 34);
+            this.основнаяToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.основнаяToolStripMenuItem.Text = "Основная";
             this.основнаяToolStripMenuItem.Click += new System.EventHandler(this.основнаяToolStripMenuItem_Click);
             // 
@@ -255,11 +257,18 @@
             this.textBox7.TabIndex = 18;
             this.textBox7.Text = "5";
             // 
+            // dsaToolStripMenuItem
+            // 
+            this.dsaToolStripMenuItem.Name = "dsaToolStripMenuItem";
+            this.dsaToolStripMenuItem.ShowShortcutKeys = false;
+            this.dsaToolStripMenuItem.Size = new System.Drawing.Size(189, 29);
+            this.dsaToolStripMenuItem.Text = "Выбор типа задачи:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1386, 689);
+            this.ClientSize = new System.Drawing.Size(1386, 775);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -315,6 +324,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.ToolStripMenuItem dsaToolStripMenuItem;
     }
 }
 

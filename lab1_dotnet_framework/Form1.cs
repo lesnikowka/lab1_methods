@@ -14,8 +14,7 @@ namespace lab1_dotnet_framework
     enum TaskType
     {
         Test,
-        Main,
-        NotSelected
+        Main
     }
 
 
@@ -39,12 +38,6 @@ namespace lab1_dotnet_framework
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (SelectedTask == TaskType.NotSelected)
-            {
-                MessageBox.Show("Вы не выбрали задачу", "Ошибка");
-                return;
-            }
-
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
             string startStepText = textBox3.Text;
@@ -117,9 +110,7 @@ namespace lab1_dotnet_framework
             List<Series> newSeriesList = new List<Series>();
 
             newSeriesList.Add(newNumericSeries);
-
-            SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
-
+            
             newNumericSeries.Name = "Численное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
 
 
@@ -129,6 +120,26 @@ namespace lab1_dotnet_framework
             newNumericSeries.Points.Add(2*X0, 2*U0);
 
             this.chart1.Series.Add(newNumericSeries);
+
+            if (SelectedTask == TaskType.Test)
+            {
+                Series newTrueSeries = new Series();
+
+                newSeriesList.Add(newTrueSeries);
+
+                newTrueSeries.Name = "Истинное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
+
+                newTrueSeries.ChartType = SeriesChartType.Line;
+
+                newTrueSeries.Points.Add(X0, U0);
+                newTrueSeries.Points.Add(3 * X0, 3 * U0);
+
+                this.chart1.Series.Add(newTrueSeries);
+            }
+
+            SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
+
+
 
         }
 
