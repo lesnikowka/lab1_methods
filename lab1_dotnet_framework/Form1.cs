@@ -39,26 +39,36 @@ namespace lab1_dotnet_framework
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (SelectedTask == TaskType.NotSelected)
+            {
+                MessageBox.Show("Вы не выбрали задачу", "Ошибка");
+                return;
+            }
+
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
             string startStepText = textBox3.Text;
             string localPrecisionText = textBox4.Text;
             string boundPrecisionText = textBox5.Text;
             string maxStepNumbersText = textBox6.Text;
+            string integrationBoundText = textBox7.Text;
 
-            if (x0Text.Length == 0 || u0Text.Length == 0 || 
+            if (x0Text.Length == 0 || u0Text.Length == 0 ||
                 startStepText.Length == 0 || localPrecisionText.Length == 0 ||
-                boundPrecisionText.Length == 0 || maxStepNumbersText.Length == 0)
+                boundPrecisionText.Length == 0 || maxStepNumbersText.Length == 0 ||
+                integrationBoundText.Length == 0
+                )
             {
                 MessageBox.Show("Вы не ввели начальные условия", "Ошибка");
                 return;
             }
 
-            x0Text.Replace('.', ',');
-            u0Text.Replace('.', ',');
-            startStepText.Replace(".", ",");
-            localPrecisionText.Replace(".", ",");   
-            boundPrecisionText.Replace('.', ',');
+            x0Text = x0Text.Replace('.', ',');
+            u0Text = u0Text.Replace('.', ',');
+            startStepText = startStepText.Replace('.', ',');
+            localPrecisionText = localPrecisionText.Replace('.', ',');
+            boundPrecisionText = boundPrecisionText.Replace('.', ',');
+            integrationBoundText = integrationBoundText.Replace('.', ',');
 
 
             double X0;
@@ -66,6 +76,7 @@ namespace lab1_dotnet_framework
             double startStep;
             double localPrecision;
             double boundPrecision;
+            double integrationBound;
 
             int maxStepNumbers;
 
@@ -77,6 +88,7 @@ namespace lab1_dotnet_framework
                 localPrecision = Convert.ToDouble(boundPrecisionText);
                 boundPrecision = Convert.ToDouble(maxStepNumbersText);  
                 maxStepNumbers = Convert.ToInt32(maxStepNumbersText);
+                integrationBound = Convert.ToDouble(integrationBoundText);
             }
             catch 
             {
@@ -86,31 +98,37 @@ namespace lab1_dotnet_framework
 
             Tuple<double, double> x0u0Tuple = new Tuple<double, double>(X0, U0);
 
-            List<Series> oldSeries = SeriesForStartConditions[x0u0Tuple];
-
-            for (int i = 0; i < oldSeries.Count; i++)
+            if (SeriesForStartConditions.ContainsKey(x0u0Tuple))
             {
-                this.chart1.Series.Remove(oldSeries[i]);
+
+                List<Series> oldSeries = SeriesForStartConditions[x0u0Tuple];
+
+                for (int i = 0; i < oldSeries.Count; i++)
+                {
+                    this.chart1.Series.Remove(oldSeries[i]);
+                }
+
+                SeriesForStartConditions.Remove(x0u0Tuple);
+
             }
 
-            SeriesForStartConditions.Remove(x0u0Tuple);
+            Series newNumericSeries = new Series();
 
-            Series newSeries = new Series();
+            List<Series> newSeriesList = new List<Series>();
 
-            switch (SelectedTask)
-            {
-                case TaskType.Test:
+            newSeriesList.Add(newNumericSeries);
+
+            SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
+
+            newNumericSeries.Name = "Численное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
 
 
-                    break;
-            }
+            newNumericSeries.ChartType = SeriesChartType.Line;
 
-            newSeries.ChartType = SeriesChartType.Line;
+            newNumericSeries.Points.Add(X0, U0);
+            newNumericSeries.Points.Add(2*X0, 2*U0);
 
-            newSeries.Points.Add(X0, U0);
-            newSeries.Points.Add(2*X0, 2*U0);
-
-            this.chart1.Series.Add(newSeries);
+            this.chart1.Series.Add(newNumericSeries);
 
         }
 
@@ -137,9 +155,13 @@ namespace lab1_dotnet_framework
             return 3;
         }
 
-        private TaskType SelectedTask = TaskType.NotSelected;
+        private TaskType SelectedTask = TaskType.Main;
 
-        Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions;
+        Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
