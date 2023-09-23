@@ -14,12 +14,16 @@ namespace lab1_dotnet_framework
     enum TaskType
     {
         Test,
-        Main
+        Main1,
+        Main2
     }
 
 
     public partial class Form1 : Form
     {
+        private TaskType SelectedTask = TaskType.Main1;
+
+        Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
         public Form1()
         {
@@ -113,11 +117,9 @@ namespace lab1_dotnet_framework
             
             newNumericSeries.Name = "Численное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
 
-
             newNumericSeries.ChartType = SeriesChartType.Line;
 
-            newNumericSeries.Points.Add(X0, U0);
-            newNumericSeries.Points.Add(2*X0, 2*U0);
+            DrawNumericSolution(newNumericSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound);
 
             this.chart1.Series.Add(newNumericSeries);
 
@@ -131,8 +133,7 @@ namespace lab1_dotnet_framework
 
                 newTrueSeries.ChartType = SeriesChartType.Line;
 
-                newTrueSeries.Points.Add(X0, U0);
-                newTrueSeries.Points.Add(3 * X0, 3 * U0);
+                DrawTrueSolution(newTrueSeries, X0, U0, 0.1);
 
                 this.chart1.Series.Add(newTrueSeries);
             }
@@ -152,13 +153,22 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Тестовая";
             SelectedTask = TaskType.Test;
             this.chart1.Series.Clear();
+            checkBox1.Enabled = false;
         }
 
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            выборТипаЗадачиToolStripMenuItem.Text = "Основная";
-            SelectedTask = TaskType.Main;
+            выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
+            SelectedTask = TaskType.Main1;
             this.chart1.Series.Clear();
+            checkBox1.Enabled = true;
+        }
+        private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            выборТипаЗадачиToolStripMenuItem.Text = "Основная 2";
+            SelectedTask = TaskType.Main2;
+            this.chart1.Series.Clear();
+            checkBox1.Enabled = true;
         }
 
         private double TrueSoluitonFunction(double X0, double U0)
@@ -166,13 +176,24 @@ namespace lab1_dotnet_framework
             return 3;
         }
 
-        private TaskType SelectedTask = TaskType.Main;
+        private void DrawTrueSolution(Series series, double X0, double U0, double h)
+        {
+            series.Points.Add(X0, U0);
+            series.Points.Add(3 * X0, 3 * U0);
+        }
 
-        Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
+        private void DrawNumericSolution(Series series, double X0, double U0, double startStep, double localPrecision, double boundPrecision, int maxStepNumbers, double integrationBound)
+        {
+            series.Points.Add(X0, U0);
+            series.Points.Add(2 * X0, 2 * U0);
+        }
+
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
 
         }
+
+        
     }
 }
