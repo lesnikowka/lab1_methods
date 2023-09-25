@@ -145,7 +145,10 @@ namespace lab1_dotnet_framework
 
             SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
 
-
+            if (SelectedTask == TaskType.Main2)
+            {
+                //draw 2 graph planes for mai2
+            }
 
         }
 

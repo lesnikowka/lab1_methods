@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -43,6 +43,7 @@
             this.выборТипаЗадачиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.тестоваяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.основнаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.основная2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
@@ -53,11 +54,11 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
-            this.основная2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,10 +66,10 @@
             // chart1
             // 
             this.chart1.BackColor = System.Drawing.SystemColors.Control;
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chart1.Legends.Add(legend5);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(749, 446);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(880, 298);
@@ -149,7 +150,6 @@
             this.выборТипаЗадачиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
             this.menuStrip1.Size = new System.Drawing.Size(1898, 33);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
@@ -174,16 +174,23 @@
             // тестоваяToolStripMenuItem
             // 
             this.тестоваяToolStripMenuItem.Name = "тестоваяToolStripMenuItem";
-            this.тестоваяToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.тестоваяToolStripMenuItem.Size = new System.Drawing.Size(210, 34);
             this.тестоваяToolStripMenuItem.Text = "Тестовая";
             this.тестоваяToolStripMenuItem.Click += new System.EventHandler(this.тестоваяToolStripMenuItem_Click);
             // 
             // основнаяToolStripMenuItem
             // 
             this.основнаяToolStripMenuItem.Name = "основнаяToolStripMenuItem";
-            this.основнаяToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.основнаяToolStripMenuItem.Size = new System.Drawing.Size(210, 34);
             this.основнаяToolStripMenuItem.Text = "Основная 1";
             this.основнаяToolStripMenuItem.Click += new System.EventHandler(this.основнаяToolStripMenuItem_Click);
+            // 
+            // основная2ToolStripMenuItem
+            // 
+            this.основная2ToolStripMenuItem.Name = "основная2ToolStripMenuItem";
+            this.основная2ToolStripMenuItem.Size = new System.Drawing.Size(210, 34);
+            this.основная2ToolStripMenuItem.Text = "Основная 2";
+            this.основная2ToolStripMenuItem.Click += new System.EventHandler(this.основная2ToolStripMenuItem_Click);
             // 
             // textBox3
             // 
@@ -271,13 +278,6 @@
             this.textBox7.TabIndex = 18;
             this.textBox7.Text = "5";
             // 
-            // основная2ToolStripMenuItem
-            // 
-            this.основная2ToolStripMenuItem.Name = "основная2ToolStripMenuItem";
-            this.основная2ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.основная2ToolStripMenuItem.Text = "Основная 2";
-            this.основная2ToolStripMenuItem.Click += new System.EventHandler(this.основная2ToolStripMenuItem_Click);
-            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
@@ -291,7 +291,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(546, 47);
+            this.comboBox1.Location = new System.Drawing.Point(487, 33);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 28);
             this.comboBox1.TabIndex = 22;
@@ -317,11 +317,21 @@
             this.richTextBox1.TabIndex = 24;
             this.richTextBox1.Text = "здесь текстбокс";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(419, 36);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(62, 20);
+            this.label10.TabIndex = 25;
+            this.label10.Text = "X0, U0:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1898, 1024);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.comboBox1);
@@ -388,6 +398,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label10;
     }
 }
 
