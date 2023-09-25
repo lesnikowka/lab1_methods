@@ -33,6 +33,10 @@ namespace lab1_dotnet_framework
         public Form1()
         {
             InitializeComponent();
+
+            chart1.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
+            chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
+            chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
         }
 
         private void chart1_Click(object sender, EventArgs e)
