@@ -202,5 +202,10 @@ namespace lab1_dotnet_framework
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
