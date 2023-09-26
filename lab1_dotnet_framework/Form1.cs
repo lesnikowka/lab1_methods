@@ -26,10 +26,6 @@ namespace lab1_dotnet_framework
 
         Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
-        Dictionary<Tuple<double, double>, ArrayList> testData;
-        Dictionary<Tuple<double, double>, ArrayList> main1Data;
-        Dictionary<Tuple<double, double>, ArrayList> main2Data;
-
         public Form1()
         {
             InitializeComponent();

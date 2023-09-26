@@ -12,15 +12,11 @@ namespace lab1_dotnet_framework
 {
     internal class DataBase
     {
+        private SqliteConnection connection;
+
         public DataBase(string directory)
         {
             string connectionString = "Data Source=" + Directory.GetCurrentDirectory() + directory;
-
-
-            SqliteConnection connection;
-
-            connection = new SqliteConnection(connectionString);
-
 
             try
             {
@@ -32,25 +28,68 @@ namespace lab1_dotnet_framework
             }
 
             connection.Open();
+        }
 
+        ~DataBase()
+        {
+            connection.Close();
+        }
+
+        List<List<string>> GetAllStartConditions(string table)
+        {
             SqliteCommand command = connection.CreateCommand();
 
-            command.CommandText = "select * from test;";
+            command.CommandText = "select distinct u0, v0 from " + table + ";";
 
             SqliteDataReader reader = command.ExecuteReader();
 
-            List<string> data = new List<string>();
+            List<List<string>> allConditions =  new List<List<string>>();
+
+            while (reader.Read()) {
+                List<string> currentRow = new List<string>();
+
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    currentRow.Add(reader.GetString(i));
+                }
+
+                allConditions.Add(currentRow);
+            }
+
+            return allConditions;
+        }
+        
+
+        public List<List<string>> GetDataForStartCondition(string table, List<string> startCondition)
+        {
+            SqliteCommand command = connection.CreateCommand();
+
+            if (table == "test") 
+            {
+                command.CommandText = "select id, x, v, v2, v_v2, loc_prec, h, c1, c2, u, u_v from " + table + " where x0 == " + startCondition[0] + " and u0 == " + startCondition[1] + ";";
+            }
+            else
+            {
+                command.CommandText = "select id, x, v, v2, v_v2, loc_prec, h, c1, c2 from " + table + " where x0 == " + startCondition[0] + " and u0 == " + startCondition[1] + ";";
+            }
+
+            SqliteDataReader reader =  command.ExecuteReader();
+
+            List<List<string>> data = new List<List<string>>(); 
 
             while (reader.Read())
             {
+                List<string> current  = new List<string>(); 
+
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    string tmp = reader.GetString(i);
+                    current.Add(reader.GetString(i));   
                 }
+
+                data.Add(current);  
             }
 
-
-
+            return data;
         }
     }
 }
