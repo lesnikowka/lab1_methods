@@ -91,6 +91,42 @@ namespace lab1_dotnet_framework
 
             return data;
         }
+
+        public void writeDataForStartCondition(string table, List<string> startCondition, List<List<string>> data)
+        {
+            SqliteCommand commandRemoving = connection.CreateCommand();
+
+            commandRemoving.CommandText = "delete from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
+
+            commandRemoving.ExecuteNonQuery();
+
+            for (int i = 0; i < data.Count; i++)
+            {
+
+                SqliteCommand commandAdding = connection.CreateCommand();
+
+                commandAdding.CommandText = "insert into " + table + "(x0, u0, id, x, v, v2, v_v2, loc_prec, h, c1, c2";
+
+                if (table == "test")
+                {
+                    commandAdding.CommandText += ", u, u_v";
+                }
+
+                commandAdding.CommandText += ") values(";
+
+                for (int j = 0; j < data[i].Count; j++)
+                {
+                    commandAdding.CommandText += data[i][j] + ", ";
+                }
+
+                commandAdding.CommandText = commandAdding.CommandText.Substring(0, commandAdding.CommandText.Length - 1);
+
+                commandAdding.CommandText += ");";
+
+                commandAdding.ExecuteNonQuery();
+            }
+            
+        }
     }
 }
     
