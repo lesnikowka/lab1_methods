@@ -37,6 +37,16 @@ namespace lab1_dotnet_framework
             chart1.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
+
+            try
+            {
+                DataBase db = new DataBase("\\database\\lab1.sqlite3");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
         }
 
         private void chart1_Click(object sender, EventArgs e)
