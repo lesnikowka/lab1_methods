@@ -12,26 +12,37 @@ namespace lab1_dotnet_framework
 {
     internal class DataBase
     {
-        private SqliteConnection connection;
+        string BaseDirectory { get; }
 
         public DataBase(string directory)
         {
-            string connectionString = "Data Source=" + Directory.GetCurrentDirectory() + directory;
+            BaseDirectory = directory;
+        }
+
+        private SqliteConnection GetConnection()
+        {
+            string connectionString = "Data Source=" + Directory.GetCurrentDirectory() + BaseDirectory;
+
+            SqliteConnection connection = null;
 
             try
             {
                 connection = new SqliteConnection(connectionString);
+
+                connection.Open();
             }
             catch
             {
                 throw new Exception("База данных не найдена");
             }
 
-            connection.Open();
+            return connection;
         }
 
         List<List<string>> GetAllStartConditions(string table)
         {
+            SqliteConnection connection = GetConnection();
+
             SqliteCommand command = connection.CreateCommand();
 
             command.CommandText = "select distinct u0, v0 from " + table + ";";
@@ -51,12 +62,16 @@ namespace lab1_dotnet_framework
                 allConditions.Add(currentRow);
             }
 
+            connection.Close();
+
             return allConditions;
         }
         
 
         public List<List<string>> GetDataForStartCondition(string table, List<string> startCondition)
         {
+            SqliteConnection connection = GetConnection();
+
             SqliteCommand command = connection.CreateCommand();
 
             if (table == "test") 
@@ -84,11 +99,15 @@ namespace lab1_dotnet_framework
                 data.Add(current);  
             }
 
+            connection.Close();
+
             return data;
         }
 
         public void writeDataForStartCondition(string table, List<string> startCondition, List<List<string>> data)
         {
+            SqliteConnection connection = GetConnection();
+
             SqliteCommand commandRemoving = connection.CreateCommand();
 
             commandRemoving.CommandText = "delete from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
@@ -123,6 +142,7 @@ namespace lab1_dotnet_framework
                 commandAdding.ExecuteNonQuery();
             }
             
+            connection.Close();
         }
     }
 }
