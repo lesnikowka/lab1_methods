@@ -30,11 +30,6 @@ namespace lab1_dotnet_framework
             connection.Open();
         }
 
-        ~DataBase()
-        {
-            connection.Close();
-        }
-
         List<List<string>> GetAllStartConditions(string table)
         {
             SqliteCommand command = connection.CreateCommand();
@@ -113,6 +108,8 @@ namespace lab1_dotnet_framework
                 }
 
                 commandAdding.CommandText += ") values(";
+
+                commandAdding.CommandText += startCondition[0] + ", " + startCondition[1] + ", ";
 
                 for (int j = 0; j < data[i].Count; j++)
                 {

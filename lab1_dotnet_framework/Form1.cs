@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Collections;
+using System.Windows.Forms.VisualStyles;
 
 namespace lab1_dotnet_framework
 {
@@ -26,6 +27,8 @@ namespace lab1_dotnet_framework
 
         Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
+        DataTable table = new DataTable();
+
         public Form1()
         {
             InitializeComponent();
@@ -33,16 +36,6 @@ namespace lab1_dotnet_framework
             chart1.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
-
-            try
-            {
-                DataBase db = new DataBase("\\database\\lab1.sqlite3");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                this.Close();
-            }
         }
 
         private void chart1_Click(object sender, EventArgs e)
@@ -164,6 +157,29 @@ namespace lab1_dotnet_framework
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                DataBase db = new DataBase("\\database\\lab1.sqlite3");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
+
+
+            table.Columns.Add("id", typeof(int));
+            table.Columns.Add("xi", typeof(double));
+            table.Columns.Add("vi", typeof(double));
+            table.Columns.Add("v2i", typeof(double));
+            table.Columns.Add("vi-v2i", typeof(double));
+            table.Columns.Add("loc_prec", typeof(double));
+            table.Columns.Add("hi", typeof(double));
+            table.Columns.Add("C1", typeof(int));
+            table.Columns.Add("C2", typeof(int));
+            
+
+            dataGridView1.DataSource = table;
         }
 
         private void тестоваяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -171,6 +187,13 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Тестовая";
             SelectedTask = TaskType.Test;
             this.chart1.Series.Clear();
+
+            if (!table.Columns.Contains("u") && !table.Columns.Contains("u-v"))
+            {
+                table.Columns.Add("u", typeof(double));
+                table.Columns.Add("u-v", typeof(double));
+            }
+
         }
 
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -178,12 +201,25 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
             SelectedTask = TaskType.Main1;
             this.chart1.Series.Clear();
+
+            if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
+            {
+                table.Columns.Remove("u");
+                table.Columns.Remove("u-v");
+            }
+
         }
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 2";
             SelectedTask = TaskType.Main2;
             this.chart1.Series.Clear();
+
+            if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
+            {
+                table.Columns.Remove("u");
+                table.Columns.Remove("u-v");
+            }
         }
 
         private double TrueSoluitonFunction(double X0, double U0)
