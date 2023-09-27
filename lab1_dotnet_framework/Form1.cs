@@ -25,9 +25,11 @@ namespace lab1_dotnet_framework
     {
         private TaskType SelectedTask = TaskType.Main1;
 
-        Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
+        private Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
-        DataTable table = new DataTable();
+        private DataTable table = new DataTable();
+
+        private DataBase db = null;
 
         public Form1()
         {
@@ -159,7 +161,7 @@ namespace lab1_dotnet_framework
         {
             try
             {
-                DataBase db = new DataBase("\\database\\lab1.sqlite3");
+                db = new DataBase("\\database\\lab1.sqlite3");
             }
             catch (Exception ex)
             {
@@ -178,8 +180,19 @@ namespace lab1_dotnet_framework
             table.Columns.Add("C1", typeof(int));
             table.Columns.Add("C2", typeof(int));
             
-
             dataGridView1.DataSource = table;
+
+            showStartConditions("test");
+        }
+
+        private void showStartConditions(string table)
+        {
+            List<List<string>> startConditions = db.GetAllStartConditions(table);
+
+            for (int i = 0; i < startConditions.Count; i++)
+            {
+                comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1]);
+            }
         }
 
         private void тестоваяToolStripMenuItem_Click(object sender, EventArgs e)

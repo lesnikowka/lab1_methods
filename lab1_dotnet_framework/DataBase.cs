@@ -39,13 +39,13 @@ namespace lab1_dotnet_framework
             return connection;
         }
 
-        List<List<string>> GetAllStartConditions(string table)
+        public List<List<string>> GetAllStartConditions(string table)
         {
             SqliteConnection connection = GetConnection();
 
             SqliteCommand command = connection.CreateCommand();
 
-            command.CommandText = "select distinct u0, v0 from " + table + ";";
+            command.CommandText = "select distinct x0, u0 from " + table + ";";
 
             SqliteDataReader reader = command.ExecuteReader();
 
