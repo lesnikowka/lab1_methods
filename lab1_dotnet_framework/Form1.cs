@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Collections;
 using System.Windows.Forms.VisualStyles;
+using System.Numerics;
 
 namespace lab1_dotnet_framework
 {
@@ -30,6 +31,10 @@ namespace lab1_dotnet_framework
         private DataTable table = new DataTable();
 
         private DataBase db = null;
+
+        private List<string> columnNames = new List<string>{ "id", "xi", "vi", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2", "u", "u-v" };
+
+        string currentTableDB = "main1";
 
         public Form1()
         {
@@ -170,24 +175,37 @@ namespace lab1_dotnet_framework
             }
 
 
-            table.Columns.Add("id", typeof(int));
-            table.Columns.Add("xi", typeof(double));
-            table.Columns.Add("vi", typeof(double));
-            table.Columns.Add("v2i", typeof(double));
-            table.Columns.Add("vi-v2i", typeof(double));
-            table.Columns.Add("loc_prec", typeof(double));
-            table.Columns.Add("hi", typeof(double));
-            table.Columns.Add("C1", typeof(int));
-            table.Columns.Add("C2", typeof(int));
+            table.Columns.Add("id", typeof(string));
+            table.Columns.Add("xi", typeof(string));
+            table.Columns.Add("vi", typeof(string));
+            table.Columns.Add("v2i", typeof(string));
+            table.Columns.Add("vi-v2i", typeof(string));
+            table.Columns.Add("loc_prec", typeof(string));
+            table.Columns.Add("hi", typeof(string));
+            table.Columns.Add("C1", typeof(string));
+            table.Columns.Add("C2", typeof(string));
             
             dataGridView1.DataSource = table;
 
-            showStartConditions("test");
+            showStartConditions("main1");
         }
 
-        private void showStartConditions(string table)
+        private void showStartConditions(string tableName)
         {
-            List<List<string>> startConditions = db.GetAllStartConditions(table);
+            comboBox1.Items.Clear();
+
+            List<List<string>> startConditions = null;
+
+            try
+            {
+                startConditions = db.GetAllStartConditions(tableName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
+
 
             for (int i = 0; i < startConditions.Count; i++)
             {
@@ -203,10 +221,13 @@ namespace lab1_dotnet_framework
 
             if (!table.Columns.Contains("u") && !table.Columns.Contains("u-v"))
             {
-                table.Columns.Add("u", typeof(double));
-                table.Columns.Add("u-v", typeof(double));
+                table.Columns.Add("u", typeof(string));
+                table.Columns.Add("u-v", typeof(string));
             }
 
+            showStartConditions("test");
+
+            currentTableDB = "test";
         }
 
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -221,6 +242,11 @@ namespace lab1_dotnet_framework
                 table.Columns.Remove("u-v");
             }
 
+
+            showStartConditions("main1");
+
+            currentTableDB = "main1";
+
         }
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -233,6 +259,11 @@ namespace lab1_dotnet_framework
                 table.Columns.Remove("u");
                 table.Columns.Remove("u-v");
             }
+
+
+            showStartConditions("main2");
+
+            currentTableDB = "main2";
         }
 
         private double TrueSoluitonFunction(double X0, double U0)
@@ -252,6 +283,24 @@ namespace lab1_dotnet_framework
             series.Points.Add(2 * X0, 2 * U0);
         }
 
+        private void ShowDataForStartCondition(string tableName, List<string> startCondition)
+        {
+            List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
+
+            int columnNamesSize = tableName == "test" ?  columnNames.Count : columnNames.Count - 2; 
+            
+            for (int i = 0; i < dataForStartCondition.Count; i++)
+            {
+                DataRow row = table.NewRow();
+
+                for (int j = 0; j < columnNamesSize; j++)
+                {
+                    row[columnNames[j]] = dataForStartCondition[i][j];
+                }
+
+                table.Rows.Add(row);    
+            }
+        }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
@@ -262,9 +311,28 @@ namespace lab1_dotnet_framework
         {
         }
 
+        List<string> stringConditionToList(string startConditionString) // 1,
+        {
+            List<string> startCondition = new List<string>();
+
+            int commaIndex = startConditionString.IndexOf(',');
+
+            startCondition.Add(startConditionString.Substring(0, commaIndex));
+            startCondition.Add(startConditionString.Substring(commaIndex + 2));
+
+            return startCondition;
+        }
+
         private void label9_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            List<string> selectedCondition = stringConditionToList(comboBox1.GetItemText(comboBox1.SelectedItem));
+
+            ShowDataForStartCondition(currentTableDB, selectedCondition);
         }
     }
 }

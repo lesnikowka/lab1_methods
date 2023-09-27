@@ -1,4 +1,4 @@
 .vs/
-lab1_dotnet_framework/bin/
-lab1_dotnet_framework/obj/
+lab1_dotnet_framework/bin
+lab1_dotnet_framework/obj
 packages/

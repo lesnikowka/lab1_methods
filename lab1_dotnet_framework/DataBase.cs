@@ -12,6 +12,8 @@ namespace lab1_dotnet_framework
 {
     internal class DataBase
     {
+
+        private List<string> columnNames = new List<string> { "id", "x", "v", "v2", "v_v2", "loc_prec", "h", "c1", "c2", "u", "u_v" };
         string BaseDirectory { get; }
 
         public DataBase(string directory)
@@ -74,13 +76,32 @@ namespace lab1_dotnet_framework
 
             SqliteCommand command = connection.CreateCommand();
 
+            string columnNamesTest = "";
+            string columnNamesMain = "";
+
+            for (int i = 0; i < columnNames.Count; i++)
+            {
+                columnNamesTest += columnNames[i];
+
+                if (i != columnNames.Count - 1) 
+                    columnNamesTest += ", ";
+            }
+
+            for (int i = 0; i < columnNames.Count - 2; i++)
+            {
+                columnNamesMain += columnNames[i];
+
+                if (i != columnNames.Count - 3)
+                    columnNamesMain += ", ";
+            }
+
             if (table == "test") 
             {
-                command.CommandText = "select id, x, v, v2, v_v2, loc_prec, h, c1, c2, u, u_v from " + table + " where x0 == " + startCondition[0] + " and u0 == " + startCondition[1] + ";";
+                command.CommandText = "select " + columnNamesTest + " from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
             }
             else
             {
-                command.CommandText = "select id, x, v, v2, v_v2, loc_prec, h, c1, c2 from " + table + " where x0 == " + startCondition[0] + " and u0 == " + startCondition[1] + ";";
+                command.CommandText = "select " + columnNamesMain + " from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
             }
 
             SqliteDataReader reader =  command.ExecuteReader();
