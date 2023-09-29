@@ -47,11 +47,6 @@ namespace lab1_dotnet_framework
             
         }
 
-        private void chart1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             this.chart1.Series.Clear();
@@ -315,15 +310,6 @@ namespace lab1_dotnet_framework
             }
         }
 
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         List<string> stringConditionToList(string startConditionString) // 1,
         {
             List<string> startCondition = new List<string>();
@@ -336,21 +322,11 @@ namespace lab1_dotnet_framework
             return startCondition;
         }
 
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             List<string> selectedCondition = stringConditionToList(comboBox1.GetItemText(comboBox1.SelectedItem));
 
             ShowDataForStartCondition(currentTableDB, selectedCondition);
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
