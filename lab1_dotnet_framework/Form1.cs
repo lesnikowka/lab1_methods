@@ -298,6 +298,8 @@ namespace lab1_dotnet_framework
         {
             List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
 
+            table.Rows.Clear();
+
             int columnNamesSize = tableName == "test" ?  columnNames.Count : columnNames.Count - 2; 
             
             for (int i = 0; i < dataForStartCondition.Count; i++)
@@ -344,6 +346,11 @@ namespace lab1_dotnet_framework
             List<string> selectedCondition = stringConditionToList(comboBox1.GetItemText(comboBox1.SelectedItem));
 
             ShowDataForStartCondition(currentTableDB, selectedCondition);
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
