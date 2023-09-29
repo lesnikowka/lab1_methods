@@ -43,6 +43,8 @@ namespace lab1_dotnet_framework
             chart1.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
+
+            
         }
 
         private void chart1_Click(object sender, EventArgs e)
@@ -134,6 +136,8 @@ namespace lab1_dotnet_framework
 
             newNumericSeries.ChartType = SeriesChartType.Line;
 
+            newNumericSeries.BorderWidth = 2;
+
             DrawNumericSolution(newNumericSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound);
 
             this.chart1.Series.Add(newNumericSeries);
@@ -147,6 +151,8 @@ namespace lab1_dotnet_framework
                 newTrueSeries.Name = "Истинное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
 
                 newTrueSeries.ChartType = SeriesChartType.Line;
+
+                newTrueSeries.BorderWidth = 2;
 
                 DrawTrueSolution(newTrueSeries, X0, U0, 0.1);
 
@@ -273,14 +279,19 @@ namespace lab1_dotnet_framework
 
         private void DrawTrueSolution(Series series, double X0, double U0, double h)
         {
-            series.Points.Add(X0, U0);
-            series.Points.Add(3 * X0, 3 * U0);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                series.Points.AddXY(i, i * i);
+            }
         }
 
         private void DrawNumericSolution(Series series, double X0, double U0, double startStep, double localPrecision, double boundPrecision, int maxStepNumbers, double integrationBound)
         {
-            series.Points.Add(X0, U0);
-            series.Points.Add(2 * X0, 2 * U0);
+            for (int i = 0; i < 1000; i++)
+            {
+                series.Points.AddXY(i, i * i * 1.5);
+            }
         }
 
         private void ShowDataForStartCondition(string tableName, List<string> startCondition)
