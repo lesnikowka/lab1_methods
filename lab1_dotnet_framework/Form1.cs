@@ -327,14 +327,16 @@ namespace lab1_dotnet_framework
 
                 for (int j = 0; j < columnNamesSize; j++)
                 {
-                    row[columnNames[j]] = dataForStartCondition[i][j];
+                    int j_index = tableName == "main2" ? j + 1 : j;
+
+                    row[columnNames[j]] = dataForStartCondition[i][j_index];
                 }
 
                 table.Rows.Add(row);    
             }
         }
 
-        List<string> stringConditionToList(string startConditionString) // 1,
+        List<string> stringConditionToList(string startConditionString) 
         {
             List<string> startCondition = new List<string>();
 
