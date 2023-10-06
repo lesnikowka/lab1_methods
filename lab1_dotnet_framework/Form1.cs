@@ -189,6 +189,10 @@ namespace lab1_dotnet_framework
             dataGridView1.DataSource = table;
 
             showStartConditions("main1");
+
+            textBox8.Enabled = false;
+            textBox9.Enabled = false;
+            textBox10.Enabled = false;
         }
 
         private void showStartConditions(string tableName)
@@ -226,9 +230,17 @@ namespace lab1_dotnet_framework
                 table.Columns.Add("u-v", typeof(string));
             }
 
+            table.Rows.Clear();
+
             showStartConditions("test");
 
             currentTableDB = "test";
+
+            table.Rows.Clear();
+
+            textBox8.Enabled = false;
+            textBox9.Enabled = false;
+            textBox10.Enabled = false;
         }
 
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -244,9 +256,15 @@ namespace lab1_dotnet_framework
             }
 
 
+            table.Rows.Clear();
+
             showStartConditions("main1");
 
             currentTableDB = "main1";
+
+            textBox8.Enabled = false;
+            textBox9.Enabled = false;
+            textBox10.Enabled = false;
 
         }
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -262,9 +280,15 @@ namespace lab1_dotnet_framework
             }
 
 
+            table.Rows.Clear();
+
             showStartConditions("main2");
 
             currentTableDB = "main2";
+
+            textBox8.Enabled = true;
+            textBox9.Enabled = true;
+            textBox10.Enabled = true;
         }
 
         private double TrueSoluitonFunction(double X0, double U0)
