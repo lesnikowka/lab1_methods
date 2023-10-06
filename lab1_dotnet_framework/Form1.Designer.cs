@@ -176,7 +176,7 @@
             this.выборТипаЗадачиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1691, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1691, 33);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -184,7 +184,7 @@
             // 
             this.dsaToolStripMenuItem.Name = "dsaToolStripMenuItem";
             this.dsaToolStripMenuItem.ShowShortcutKeys = false;
-            this.dsaToolStripMenuItem.Size = new System.Drawing.Size(189, 32);
+            this.dsaToolStripMenuItem.Size = new System.Drawing.Size(189, 29);
             this.dsaToolStripMenuItem.Text = "Выбор типа задачи:";
             // 
             // выборТипаЗадачиToolStripMenuItem
@@ -194,7 +194,7 @@
             this.основнаяToolStripMenuItem,
             this.основная2ToolStripMenuItem});
             this.выборТипаЗадачиToolStripMenuItem.Name = "выборТипаЗадачиToolStripMenuItem";
-            this.выборТипаЗадачиToolStripMenuItem.Size = new System.Drawing.Size(124, 32);
+            this.выборТипаЗадачиToolStripMenuItem.Size = new System.Drawing.Size(124, 29);
             this.выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
             // 
             // тестоваяToolStripMenuItem
@@ -273,9 +273,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(28, 298);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(264, 20);
+            this.label6.Size = new System.Drawing.Size(260, 20);
             this.label6.TabIndex = 15;
-            this.label6.Text = "Погрешность выхода за границы:";
+            this.label6.Text = "Погрешность выхода за границу:";
             // 
             // label7
             // 
