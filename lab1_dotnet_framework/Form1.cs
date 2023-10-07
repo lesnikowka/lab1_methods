@@ -102,6 +102,7 @@ namespace lab1_dotnet_framework
             }
 
             Tuple<double, double> x0u0Tuple = new Tuple<double, double>(X0, U0);
+            deleteOldSeries(X0, U0);
 
             List<Series> newSeriesList = new List<Series>();
 
@@ -169,6 +170,8 @@ namespace lab1_dotnet_framework
                 for (int i = 0; i < oldSeries.Count; i++)
                 {
                     this.chart1.Series.Remove(oldSeries[i]);
+                    this.chart2.Series.Remove(oldSeries[i]);
+                    this.chart3.Series.Remove(oldSeries[i]);
                 }
 
                 SeriesForStartConditions.Remove(x0u0Tuple);
@@ -178,7 +181,7 @@ namespace lab1_dotnet_framework
 
         private void pointsToCommas(ref string s)
         {
-            s.Replace('.', ',');
+            s = s.Replace('.', ',');
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -242,6 +245,8 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Тестовая";
             selectedTask = TaskType.Test;
             this.chart1.Series.Clear();
+            this.chart2.Series.Clear();
+            this.chart3.Series.Clear();
 
             if (!table.Columns.Contains("u") && !table.Columns.Contains("u-v"))
             {
@@ -267,6 +272,8 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
             selectedTask = TaskType.Main1;
             this.chart1.Series.Clear();
+            this.chart2.Series.Clear();
+            this.chart3.Series.Clear();
 
             if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
             {
@@ -291,6 +298,8 @@ namespace lab1_dotnet_framework
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 2";
             selectedTask = TaskType.Main2;
             this.chart1.Series.Clear();
+            this.chart2.Series.Clear();
+            this.chart3.Series.Clear();
 
             if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
             {
@@ -335,16 +344,25 @@ namespace lab1_dotnet_framework
 
             if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
             {
-                //mainSeries.Points.AddXY()
+                for (int i = 0; i < 1000; i++)
+                {
+                    mainSeries.Points.AddXY(i, i * i * 1.5);
+                }
             }
             else
             {
-
-            }
-
-            for (int i = 0; i < 1000; i++)
-            {
-                //series.Points.AddXY(i, i * i * 1.5);
+                for (int i = 0; i < 1000; i++)
+                {
+                    mainSeries.Points.AddXY(i, i * i * 1.5);
+                }
+                for (int i = 0; i < 1000; i++)
+                {
+                    derSeries.Points.AddXY(i, i * i * 1.5);
+                }
+                for (int i = 0; i < 1000; i++)
+                {
+                    phaseSeries.Points.AddXY(i, i * i * 1.5);
+                }
             }
         }
 
