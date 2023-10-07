@@ -24,17 +24,17 @@ namespace lab1_dotnet_framework
 
     public partial class Form1 : Form
     {
-        private TaskType SelectedTask = TaskType.Main1;
+        private DataBase db = null;
+        private DataTable table = new DataTable();
+        private DataTable table2 = new DataTable();
+
+        private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2", "u", "u-v" };
+        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "u'i", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2" };
 
         private Dictionary<Tuple<double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double>, List<Series>>();
 
-        private DataTable table = new DataTable();
-
-        private DataBase db = null;
-
-        private List<string> columnNames = new List<string>{ "id", "xi", "vi", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2", "u", "u-v" };
-
-        string currentTableDB = "main1";
+        private TaskType selectedTask = TaskType.Main1;
+        private string currentTableDB = "main1";
 
         public Form1()
         {
@@ -54,6 +54,8 @@ namespace lab1_dotnet_framework
 
         private void button2_Click(object sender, EventArgs e)
         {
+            bool withControl = checkBox1.Checked;
+
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
             string startStepText = textBox3.Text;
@@ -72,21 +74,15 @@ namespace lab1_dotnet_framework
                 return;
             }
 
-            x0Text = x0Text.Replace('.', ',');
-            u0Text = u0Text.Replace('.', ',');
-            startStepText = startStepText.Replace('.', ',');
-            localPrecisionText = localPrecisionText.Replace('.', ',');
-            boundPrecisionText = boundPrecisionText.Replace('.', ',');
-            integrationBoundText = integrationBoundText.Replace('.', ',');
+            pointsToCommas(ref x0Text);
+            pointsToCommas(ref u0Text);
+            pointsToCommas(ref startStepText);
+            pointsToCommas(ref localPrecisionText);
+            pointsToCommas(ref boundPrecisionText);
+            pointsToCommas(ref integrationBoundText);
 
 
-            double X0;
-            double U0;
-            double startStep;
-            double localPrecision;
-            double boundPrecision;
-            double integrationBound;
-
+            double X0, U0, startStep, localPrecision, boundPrecision, integrationBound;
             int maxStepNumbers;
 
             try
@@ -107,6 +103,64 @@ namespace lab1_dotnet_framework
 
             Tuple<double, double> x0u0Tuple = new Tuple<double, double>(X0, U0);
 
+            List<Series> newSeriesList = new List<Series>();
+
+
+            Series newNumericSeries = new Series();
+            newNumericSeries.Name = "Численное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
+            newNumericSeries.ChartType = SeriesChartType.Line;
+            newNumericSeries.BorderWidth = 2;
+            this.chart1.Series.Add(newNumericSeries);
+            newSeriesList.Add(newNumericSeries);
+
+            //DrawNumericSolution(newNumericSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
+
+
+            if (selectedTask == TaskType.Test)
+            {
+                Series newTrueSeries = new Series();
+                newTrueSeries.Name = "Истинное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
+                newTrueSeries.ChartType = SeriesChartType.Line;
+                newTrueSeries.BorderWidth = 2;
+                this.chart1.Series.Add(newTrueSeries);
+                newSeriesList.Add(newTrueSeries);
+
+                DrawTrueSolution(newTrueSeries, X0, U0, 0.1);
+            }
+
+            if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
+            {
+                DrawNumericSolution(newNumericSeries, null, null, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
+            }
+            else
+            {
+                Series newDerivativeSeries = new Series();
+                newDerivativeSeries.Name = "Производная при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
+                newDerivativeSeries.ChartType = SeriesChartType.Line;
+                newDerivativeSeries.BorderWidth = 2;
+                this.chart3.Series.Add(newDerivativeSeries);
+                newSeriesList.Add(newDerivativeSeries);
+
+
+                Series newPhaseSeries = new Series();
+                newPhaseSeries.Name = "Фазовая траектория при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
+                newPhaseSeries.ChartType = SeriesChartType.Line;
+                newPhaseSeries.BorderWidth = 2;
+                this.chart2.Series.Add(newPhaseSeries);
+                newSeriesList.Add(newPhaseSeries);
+
+                DrawNumericSolution(newNumericSeries, newDerivativeSeries, newPhaseSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
+            }
+
+            SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
+
+        }
+
+        private void deleteOldSeries(double X0, double U0)
+        {
+
+            Tuple<double, double> x0u0Tuple = new Tuple<double, double>(X0, U0);
+
             if (SeriesForStartConditions.ContainsKey(x0u0Tuple))
             {
 
@@ -120,47 +174,11 @@ namespace lab1_dotnet_framework
                 SeriesForStartConditions.Remove(x0u0Tuple);
 
             }
+        }
 
-            Series newNumericSeries = new Series();
-
-            List<Series> newSeriesList = new List<Series>();
-
-            newSeriesList.Add(newNumericSeries);
-            
-            newNumericSeries.Name = "Численное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
-
-            newNumericSeries.ChartType = SeriesChartType.Line;
-
-            newNumericSeries.BorderWidth = 2;
-
-            DrawNumericSolution(newNumericSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound);
-
-            this.chart1.Series.Add(newNumericSeries);
-
-            if (SelectedTask == TaskType.Test)
-            {
-                Series newTrueSeries = new Series();
-
-                newSeriesList.Add(newTrueSeries);
-
-                newTrueSeries.Name = "Истинное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
-
-                newTrueSeries.ChartType = SeriesChartType.Line;
-
-                newTrueSeries.BorderWidth = 2;
-
-                DrawTrueSolution(newTrueSeries, X0, U0, 0.1);
-
-                this.chart1.Series.Add(newTrueSeries);
-            }
-
-            SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
-
-            if (SelectedTask == TaskType.Main2)
-            {
-                //draw 2 graph planes for mai2
-            }
-
+        private void pointsToCommas(ref string s)
+        {
+            s.Replace('.', ',');
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -176,17 +194,18 @@ namespace lab1_dotnet_framework
             }
 
 
-            table.Columns.Add("id", typeof(string));
-            table.Columns.Add("xi", typeof(string));
-            table.Columns.Add("vi", typeof(string));
-            table.Columns.Add("v2i", typeof(string));
-            table.Columns.Add("vi-v2i", typeof(string));
-            table.Columns.Add("loc_prec", typeof(string));
-            table.Columns.Add("hi", typeof(string));
-            table.Columns.Add("C1", typeof(string));
-            table.Columns.Add("C2", typeof(string));
-            
+            for (int i = 0; i < columnNames.Count - 2; i++)
+            {
+                table.Columns.Add(columnNames[i], typeof(string));
+            }
+
+            for (int i = 0; i < columnNamesForDerivative.Count; i++)
+            {
+                table2.Columns.Add(columnNamesForDerivative[i], typeof(string));
+            }
+
             dataGridView1.DataSource = table;
+            dataGridView2.DataSource = table2;
 
             showStartConditions("main1");
 
@@ -221,7 +240,7 @@ namespace lab1_dotnet_framework
         private void тестоваяToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выборТипаЗадачиToolStripMenuItem.Text = "Тестовая";
-            SelectedTask = TaskType.Test;
+            selectedTask = TaskType.Test;
             this.chart1.Series.Clear();
 
             if (!table.Columns.Contains("u") && !table.Columns.Contains("u-v"))
@@ -246,7 +265,7 @@ namespace lab1_dotnet_framework
         private void основнаяToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 1";
-            SelectedTask = TaskType.Main1;
+            selectedTask = TaskType.Main1;
             this.chart1.Series.Clear();
 
             if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
@@ -270,7 +289,7 @@ namespace lab1_dotnet_framework
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выборТипаЗадачиToolStripMenuItem.Text = "Основная 2";
-            SelectedTask = TaskType.Main2;
+            selectedTask = TaskType.Main2;
             this.chart1.Series.Clear();
 
             if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
@@ -305,11 +324,27 @@ namespace lab1_dotnet_framework
             }
         }
 
-        private void DrawNumericSolution(Series series, double X0, double U0, double startStep, double localPrecision, double boundPrecision, int maxStepNumbers, double integrationBound)
+        private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0, double startStep, double localPrecision, double boundPrecision, int maxStepNumbers, double integrationBound, bool wC)
         {
+            string tableName;
+            if (selectedTask == TaskType.Test) tableName = "test";
+            else if (selectedTask == TaskType.Main1) tableName = "main1";
+            else tableName = "main2";
+
+            List<List<string>> data = db.GetDataForStartCondition(tableName, new List<string> { X0.ToString(), U0.ToString() });
+
+            if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
+            {
+                //mainSeries.Points.AddXY()
+            }
+            else
+            {
+
+            }
+
             for (int i = 0; i < 1000; i++)
             {
-                series.Points.AddXY(i, i * i * 1.5);
+                //series.Points.AddXY(i, i * i * 1.5);
             }
         }
 
@@ -318,6 +353,7 @@ namespace lab1_dotnet_framework
             List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
 
             table.Rows.Clear();
+            table2.Rows.Clear();
 
             int columnNamesSize = tableName == "test" ?  columnNames.Count : columnNames.Count - 2; 
             
