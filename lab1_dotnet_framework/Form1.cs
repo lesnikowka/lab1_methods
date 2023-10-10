@@ -153,6 +153,9 @@ namespace lab1_dotnet_framework
 
             drawGraphs(X0, U0);
 
+            showStartConditions(tableName);
+
+
             // exec python 
             // show data for st cond (x0, u0)
             // draw graphs
@@ -277,10 +280,10 @@ namespace lab1_dotnet_framework
         private void DrawTrueSolution(Series series, double x0, double u0, double h)
         {
 
-            for (int i = 0; i < 5; i++)
-            {
-                series.Points.AddXY(i, TrueSoluitonFunction(x0, u0, i));
-            }
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    series.Points.AddXY(i, TrueSoluitonFunction(x0, u0, i));
+            //}
         }
 
         private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0)

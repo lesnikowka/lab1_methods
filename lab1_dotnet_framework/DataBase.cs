@@ -121,7 +121,7 @@ namespace lab1_dotnet_framework
                 columnNamesString = columnNamesMain2String; 
             }
 
-            command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
+            command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " + startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") + ";";
 
             SqliteDataReader reader =  command.ExecuteReader();
 
@@ -130,6 +130,7 @@ namespace lab1_dotnet_framework
             while (reader.Read())
             {
                 List<string> current  = new List<string>(); 
+
 
                 for (int i = 0; i < reader.FieldCount; i++)
                 {

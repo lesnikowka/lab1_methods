@@ -63,8 +63,7 @@ def catchParamsFromCmd():
 
 catchParamsFromCmd()
 
-print(x0, v0, h, Nmax, eps, e, WC, a, b, c, taskType)
-print(os.getcwd())
+print(WC)
 input()
 
 def testFunc(x=0, v=0):
@@ -395,21 +394,22 @@ else:
         pass
     else:
         pass
-input()
-print("database connect")
+
+
 connection = sqlite3.connect("../database/lab1.sqlite3")
-input()
 cursor = connection.cursor()
 
 if taskType == "test":
-    print("test")
     cursor.execute("delete from test where x0=? and u0=?", [x0, v0])
     for i in range(len(xi)):
-        print(i)
-        input()
-        cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        if WC:
+            cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
                              hi[i], C1i[i], C2i[i], ui[i], diff[i]]])
+        else:
+            cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                           [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
+                             hi[i], 0, 0, ui[i], diff[i]]])
 
 elif taskType == "main1":
     for i in range(len(xi)):
@@ -439,3 +439,7 @@ connection.commit()
 # plt.plot(x1Arr, v1Arr, color = 'blue')
 # plt.grid()
 # plt.show()
+
+
+print("end")
+input()
