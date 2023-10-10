@@ -137,11 +137,17 @@ namespace lab1_dotnet_framework
 
             ProcessStartInfo infoStartProcess = new ProcessStartInfo();
 
+            Process methodProcess = new Process();
+
             infoStartProcess.WorkingDirectory = "C:\\Users\\lesni\\lab1_methods\\script";
             infoStartProcess.FileName = "main.py";
             infoStartProcess.Arguments = args;
 
-            Process.Start(infoStartProcess);
+            methodProcess.StartInfo = infoStartProcess;
+
+            methodProcess.Start();
+
+            methodProcess.WaitForExit();
 
             ShowDataForStartCondition(new List<string> { X0.ToString().Replace(",", "."), U0.ToString().Replace(",", ".") });
 
