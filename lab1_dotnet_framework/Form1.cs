@@ -11,6 +11,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Collections;
 using System.Windows.Forms.VisualStyles;
 using System.Numerics;
+using System.Diagnostics;
+
 
 namespace lab1_dotnet_framework
 {
@@ -47,7 +49,7 @@ namespace lab1_dotnet_framework
             
         }
 
-        private void catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl)
+        private void catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
         {
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
@@ -56,11 +58,15 @@ namespace lab1_dotnet_framework
             string boundPrecisionText = textBox5.Text;
             string maxStepNumbersText = textBox6.Text;
             string integrationBoundText = textBox7.Text;
+            string aText = textBox8.Text;
+            string bText = textBox9.Text;
+            string cText = textBox10.Text;
 
             if (x0Text.Length == 0 || u0Text.Length == 0 ||
                 startStepText.Length == 0 || localPrecisionText.Length == 0 ||
                 boundPrecisionText.Length == 0 || maxStepNumbersText.Length == 0 ||
-                integrationBoundText.Length == 0
+                integrationBoundText.Length == 0 || aText.Length == 0 || bText.Length == 0 || 
+                cText.Length == 0
                 )
             {
                 MessageBox.Show("Вы не ввели начальные условия", "Ошибка");
@@ -73,6 +79,9 @@ namespace lab1_dotnet_framework
             pointsToCommas(ref localPrecisionText);
             pointsToCommas(ref boundPrecisionText);
             pointsToCommas(ref integrationBoundText);
+            pointsToCommas(ref aText);
+            pointsToCommas(ref bText);
+            pointsToCommas(ref cText);
 
             try
             {
@@ -83,6 +92,9 @@ namespace lab1_dotnet_framework
                 boundPrecision = Convert.ToDouble(maxStepNumbersText);
                 maxStepNumbers = Convert.ToInt32(maxStepNumbersText);
                 integrationBound = Convert.ToDouble(integrationBoundText);
+                a = Convert.ToDouble(aText);
+                b = Convert.ToDouble(bText);
+                c = Convert.ToDouble(cText);
             }
             catch
             {
@@ -95,11 +107,39 @@ namespace lab1_dotnet_framework
         
         private void executeMethod()
         {
-            double X0 = 0, U0 = 0, startStep = 0, localPrecision = 0, boundPrecision = 0, integrationBound = 0;
+            double X0 = 0, U0 = 0, startStep = 0, localPrecision = 0, boundPrecision = 0, integrationBound = 0, a = 0, b = 0, c = 0;
             int maxStepNumbers = 0;
             bool withControl = true;
 
-            catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl);
+            string tableName;
+            if (selectedTask == TaskType.Test) tableName = "test";
+            else if (selectedTask == TaskType.Main1) tableName = "main1";
+            else tableName = "main2";
+
+            catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl, ref a, ref b, ref c);
+
+            string args = "";
+
+            args += X0.ToString().Replace(",", ".") + " ";
+            args += U0.ToString().Replace(",", ".") + " ";
+            args += startStep.ToString().Replace(",", ".") + " ";
+            args += maxStepNumbers.ToString() + " ";
+            args += localPrecision.ToString().Replace(",", ".") + " ";
+            args += boundPrecision.ToString().Replace(",", ".") + " ";
+            args += (withControl ? 1 : 0).ToString() +  " ";
+            args += a.ToString().Replace(",", ".") + " ";
+            args += b.ToString().Replace(",", ".") + " ";
+            args += c.ToString().Replace(",", ".") + " ";
+            args += tableName;
+
+
+            ProcessStartInfo infoStartProcess = new ProcessStartInfo();
+
+            infoStartProcess.WorkingDirectory = "/../../../script/";
+            infoStartProcess.FileName = "main.py";
+            infoStartProcess.Arguments = "";
+
+            Process.Start(infoStartProcess);
 
 
 
