@@ -38,6 +38,7 @@ h = 0.01
 WC = True
 taskType = "test"
 
+
 def catchParamsFromCmd():
     global x0, v0, h, Nmax, eps, e, WC, a, b, c, taskType
 
@@ -77,8 +78,16 @@ def fTask1(x=0, v=0):
 
 
 # Решение тестовой задачи
-def decision(x=0, v=0):
-    return np.exp(2 * x)
+# def decision(x=0, v=0):
+#    return np.exp(2 * x)
+
+# Решение тестовой задачи
+def Const(x0=0, v0=0):
+    return v0 / np.exp(2 * x0)
+
+
+def decision(x=0, C=1):
+    return (np.exp(2 * x) * C)
 
 
 def methodStep(xn, vn, hn, f, withcontrol=False):
@@ -92,6 +101,8 @@ def methodStep(xn, vn, hn, f, withcontrol=False):
         xi.append(x)
         vi.append(v)
         hi.append(hn)
+        ui.append(decision(xn, Const(x0, v0)))
+        diff.append(decision(xn, Const(x0, v0))-vn)
     return x, v
 
 
@@ -115,6 +126,8 @@ def stepWithControl(x, v, h, f, eps):
         cntrl.append(vNext - vn)
         C1i.append(C1 - oldC1)
         C2i.append(C2 - oldC2)
+        ui.append(decision(xn, Const(x0, v0)))
+        diff.append(decision(xn, Const(x0, v0))-vn)
         return xn, vn, h
     elif abs(S) < eps / 2 ** (p + 1):
         olp.append(S)
@@ -126,6 +139,8 @@ def stepWithControl(x, v, h, f, eps):
         C1 += 1
         C1i.append(C1 - oldC1)
         C2i.append(C2 - oldC2)
+        ui.append(decision(xn, Const(x0, v0)))
+        diff.append(decision(xn, Const(x0, v0))-vn)
         return xn, vn, h * 2
     else:
         while abs(S) > eps:
@@ -143,6 +158,8 @@ def stepWithControl(x, v, h, f, eps):
         cntrl.append(vNext - vn)
         C1i.append(C1 - oldC1)
         C2i.append(C2 - oldC2)
+        ui.append(decision(xn, Const(x0, v0)))
+        diff.append(decision(xn, Const(x0, v0))-vn)
         return xn, vn, h
 
 
@@ -374,31 +391,27 @@ else:
     else:
         pass
 
-
 connection = sqlite3.connect("lab1.sqlite3")
 cursor = connection.cursor()
 
 if taskType == "test":
     for i in range(len(xi)):
         cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i+1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C1i[i], C2i[i], ui[i], ui[i]-vi[i]]])
+                           [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
+                             hi[i], C1i[i], C2i[i], ui[i], ui[i] - vi[i]]])
 
 elif taskType == "main1":
     for i in range(len(xi)):
         cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i+1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
+                           [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
                              hi[i], C1i[i], C2i[i]]])
 
 else:
     pass
 
-
 connection.commit()
 
-
-
-#xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
+# xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
 # Для тестовой задачи
 # x1Arr = []
 # i = 0
@@ -408,9 +421,9 @@ connection.commit()
 #    diff.append(u1[i] - vi[i])
 #    i += h
 
-#plt.plot(xArr, vArr, color='red')
-#plt.grid()
-#plt.show()
+# plt.plot(xArr, vArr, color='red')
+# plt.grid()
+# plt.show()
 # plt.plot(x1Arr, v1Arr, color = 'blue')
 # plt.grid()
 # plt.show()

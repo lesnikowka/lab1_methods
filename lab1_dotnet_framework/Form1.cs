@@ -114,8 +114,6 @@ namespace lab1_dotnet_framework
             this.chart1.Series.Add(newNumericSeries);
             newSeriesList.Add(newNumericSeries);
 
-            //DrawNumericSolution(newNumericSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
-
 
             if (selectedTask == TaskType.Test)
             {
