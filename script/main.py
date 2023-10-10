@@ -3,6 +3,8 @@ import math
 import matplotlib.pyplot as plt
 import sys
 import sqlite3
+import os
+
 
 # массивы для таблицы задание 1 и тестовое
 xi = []
@@ -61,13 +63,16 @@ def catchParamsFromCmd():
 
 catchParamsFromCmd()
 
+print(x0, v0, h, Nmax, eps, e, WC, a, b, c, taskType)
+print(os.getcwd())
+input()
 
 def testFunc(x=0, v=0):
     return 2 * v
 
 
 # Для задачи №1
-def fX(x=0):
+def fX(x=0, v=0):
     return (x ** 3 + 1) / (x ** 5 + 1)
 
 
@@ -390,13 +395,18 @@ else:
         pass
     else:
         pass
-
-connection = sqlite3.connect("lab1.sqlite3")
+input()
+print("database connect")
+connection = sqlite3.connect("../database/lab1.sqlite3")
+input()
 cursor = connection.cursor()
 
 if taskType == "test":
+    print("test")
     cursor.execute("delete from test where x0=? and u0=?", [x0, v0])
     for i in range(len(xi)):
+        print(i)
+        input()
         cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
                              hi[i], C1i[i], C2i[i], ui[i], diff[i]]])
@@ -411,6 +421,7 @@ else:
     pass
 
 connection.commit()
+
 
 # xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
 # Для тестовой задачи

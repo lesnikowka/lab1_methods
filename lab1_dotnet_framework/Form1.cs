@@ -132,16 +132,20 @@ namespace lab1_dotnet_framework
             args += c.ToString().Replace(",", ".") + " ";
             args += tableName;
 
+            args += " > C:\\sqlite\\log222.txt";
+
 
             ProcessStartInfo infoStartProcess = new ProcessStartInfo();
 
-            infoStartProcess.WorkingDirectory = "/../../../script/";
+            infoStartProcess.WorkingDirectory = "C:\\Users\\lesni\\lab1_methods\\script";
             infoStartProcess.FileName = "main.py";
-            infoStartProcess.Arguments = "";
+            infoStartProcess.Arguments = args;
 
             Process.Start(infoStartProcess);
 
+            ShowDataForStartCondition(new List<string> { X0.ToString().Replace(",", "."), U0.ToString().Replace(",", ".") });
 
+            drawGraphs(X0, U0);
 
             // exec python 
             // show data for st cond (x0, u0)
