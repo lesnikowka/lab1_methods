@@ -47,15 +47,8 @@ namespace lab1_dotnet_framework
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl)
         {
-            this.chart1.Series.Clear();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            bool withControl = checkBox1.Checked;
-
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
             string startStepText = textBox3.Text;
@@ -81,26 +74,38 @@ namespace lab1_dotnet_framework
             pointsToCommas(ref boundPrecisionText);
             pointsToCommas(ref integrationBoundText);
 
-
-            double X0, U0, startStep, localPrecision, boundPrecision, integrationBound;
-            int maxStepNumbers;
-
             try
             {
                 X0 = Convert.ToDouble(x0Text);
                 U0 = Convert.ToDouble(u0Text);
                 startStep = Convert.ToDouble(startStepText);
                 localPrecision = Convert.ToDouble(boundPrecisionText);
-                boundPrecision = Convert.ToDouble(maxStepNumbersText);  
+                boundPrecision = Convert.ToDouble(maxStepNumbersText);
                 maxStepNumbers = Convert.ToInt32(maxStepNumbersText);
                 integrationBound = Convert.ToDouble(integrationBoundText);
             }
-            catch 
+            catch
             {
                 MessageBox.Show("Неверный формат введенных значений", "Ошибка");
                 return;
             }
 
+            withControl = checkBox1.Checked;
+        }
+        
+        private void executeMethod()
+        {
+            double X0 = 0, U0 = 0, startStep = 0, localPrecision = 0, boundPrecision = 0, integrationBound = 0;
+            int maxStepNumbers = 0;
+            bool withControl = true;
+
+            catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl);
+
+            // exec python 
+        }
+
+        private void drawGraphs(double X0, double U0)
+        {
             Tuple<double, double> x0u0Tuple = new Tuple<double, double>(X0, U0);
             deleteOldSeries(X0, U0);
 
@@ -124,12 +129,12 @@ namespace lab1_dotnet_framework
                 this.chart1.Series.Add(newTrueSeries);
                 newSeriesList.Add(newTrueSeries);
 
-                DrawTrueSolution(newTrueSeries, X0, U0, 0.1);
+                DrawTrueSolution(newTrueSeries, X0, U0, 0.1); // написать нормально 
             }
 
             if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
             {
-                DrawNumericSolution(newNumericSeries, null, null, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
+                DrawNumericSolution(newNumericSeries, null, null, X0, U0);
             }
             else
             {
@@ -148,7 +153,7 @@ namespace lab1_dotnet_framework
                 this.chart2.Series.Add(newPhaseSeries);
                 newSeriesList.Add(newPhaseSeries);
 
-                DrawNumericSolution(newNumericSeries, newDerivativeSeries, newPhaseSeries, X0, U0, startStep, localPrecision, boundPrecision, maxStepNumbers, integrationBound, withControl);
+                DrawNumericSolution(newNumericSeries, newDerivativeSeries, newPhaseSeries, X0, U0);
             }
 
             SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
@@ -180,6 +185,119 @@ namespace lab1_dotnet_framework
         private void pointsToCommas(ref string s)
         {
             s = s.Replace('.', ',');
+        }
+
+        private void showStartConditions(string tableName)
+        {
+            comboBox1.Items.Clear();
+
+            List<List<string>> startConditions = null;
+
+            try
+            {
+                startConditions = db.GetAllStartConditions(tableName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
+
+
+            for (int i = 0; i < startConditions.Count; i++)
+            {
+                comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1]);
+            }
+        }
+
+        private double TrueSoluitonFunction(double X0, double U0)
+        {
+            return 3;
+        }
+
+        private void DrawTrueSolution(Series series, double X0, double U0, double h)
+        {
+
+            for (int i = 0; i < 1000; i++)
+            {
+                series.Points.AddXY(i, i * i);
+            }
+        }
+
+        private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0)
+        {
+            string tableName;
+            if (selectedTask == TaskType.Test) tableName = "test";
+            else if (selectedTask == TaskType.Main1) tableName = "main1";
+            else tableName = "main2";
+
+            List<List<string>> data = db.GetDataForStartCondition(tableName, new List<string> { X0.ToString(), U0.ToString() });
+
+            if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
+            {
+                for (int i = 0; i < data.Count; i++)
+                {
+                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][3]), Convert.ToDouble(data[i][4]));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < data.Count; i++)
+                {
+                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][4]), Convert.ToDouble(data[i][5]));
+                }
+
+                for (int i = 0; i < data.Count; i++)
+                {
+                    derSeries.Points.AddXY(Convert.ToDouble(data[i][4]), Convert.ToDouble(data[i][0]));
+                }
+
+                for (int i = 0; i < data.Count; i++)
+                {
+                    phaseSeries.Points.AddXY(Convert.ToDouble(data[i][5]), Convert.ToDouble(data[i][0]));
+                }
+            }
+        }
+
+        private void ShowDataForStartCondition(string tableName, List<string> startCondition)
+        {
+            List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
+
+            table.Rows.Clear();
+            table2.Rows.Clear();
+
+            int columnNamesSize = tableName == "test" ? columnNames.Count : columnNames.Count - 2;
+
+            for (int i = 0; i < dataForStartCondition.Count; i++)
+            {
+                DataRow row = table.NewRow();
+
+                for (int j = 0; j < columnNamesSize; j++)
+                {
+                    int j_index = tableName == "main2" ? j + 1 : j;
+
+                    row[columnNames[j]] = dataForStartCondition[i][j_index];
+                }
+
+                table.Rows.Add(row);
+            }
+        }
+
+        List<string> stringConditionToList(string startConditionString)
+        {
+            List<string> startCondition = new List<string>();
+
+            int commaIndex = startConditionString.IndexOf(',');
+
+            startCondition.Add(startConditionString.Substring(0, commaIndex));
+            startCondition.Add(startConditionString.Substring(commaIndex + 2));
+
+            return startCondition;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.chart1.Series.Clear();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -215,27 +333,9 @@ namespace lab1_dotnet_framework
             textBox10.Enabled = false;
         }
 
-        private void showStartConditions(string tableName)
+        private void button2_Click(object sender, EventArgs e)
         {
-            comboBox1.Items.Clear();
-
-            List<List<string>> startConditions = null;
-
-            try
-            {
-                startConditions = db.GetAllStartConditions(tableName);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                this.Close();
-            }
-
-
-            for (int i = 0; i < startConditions.Count; i++)
-            {
-                comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1]);
-            }
+            //drawGraphs();
         }
 
         private void тестоваяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -317,88 +417,7 @@ namespace lab1_dotnet_framework
             textBox10.Enabled = true;
         }
 
-        private double TrueSoluitonFunction(double X0, double U0)
-        {
-            return 3;
-        }
-
-        private void DrawTrueSolution(Series series, double X0, double U0, double h)
-        {
-
-            for (int i = 0; i < 1000; i++)
-            {
-                series.Points.AddXY(i, i * i);
-            }
-        }
-
-        private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0, double startStep, double localPrecision, double boundPrecision, int maxStepNumbers, double integrationBound, bool wC)
-        {
-            string tableName;
-            if (selectedTask == TaskType.Test) tableName = "test";
-            else if (selectedTask == TaskType.Main1) tableName = "main1";
-            else tableName = "main2";
-
-            List<List<string>> data = db.GetDataForStartCondition(tableName, new List<string> { X0.ToString(), U0.ToString() });
-
-            if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
-            {
-                for (int i = 0; i < 1000; i++)
-                {
-                    mainSeries.Points.AddXY(i, i * i * 1.5);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < 1000; i++)
-                {
-                    mainSeries.Points.AddXY(i, i * i * 1.5);
-                }
-                for (int i = 0; i < 1000; i++)
-                {
-                    derSeries.Points.AddXY(i, i * i * 1.5);
-                }
-                for (int i = 0; i < 1000; i++)
-                {
-                    phaseSeries.Points.AddXY(i, i * i * 1.5);
-                }
-            }
-        }
-
-        private void ShowDataForStartCondition(string tableName, List<string> startCondition)
-        {
-            List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
-
-            table.Rows.Clear();
-            table2.Rows.Clear();
-
-            int columnNamesSize = tableName == "test" ?  columnNames.Count : columnNames.Count - 2; 
-            
-            for (int i = 0; i < dataForStartCondition.Count; i++)
-            {
-                DataRow row = table.NewRow();
-
-                for (int j = 0; j < columnNamesSize; j++)
-                {
-                    int j_index = tableName == "main2" ? j + 1 : j;
-
-                    row[columnNames[j]] = dataForStartCondition[i][j_index];
-                }
-
-                table.Rows.Add(row);    
-            }
-        }
-
-        List<string> stringConditionToList(string startConditionString) 
-        {
-            List<string> startCondition = new List<string>();
-
-            int commaIndex = startConditionString.IndexOf(',');
-
-            startCondition.Add(startConditionString.Substring(0, commaIndex));
-            startCondition.Add(startConditionString.Substring(commaIndex + 2));
-
-            return startCondition;
-        }
+       
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
