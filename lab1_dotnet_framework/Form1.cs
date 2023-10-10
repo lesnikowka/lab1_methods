@@ -89,7 +89,7 @@ namespace lab1_dotnet_framework
                 U0 = Convert.ToDouble(u0Text);
                 startStep = Convert.ToDouble(startStepText);
                 localPrecision = Convert.ToDouble(boundPrecisionText);
-                boundPrecision = Convert.ToDouble(maxStepNumbersText);
+                boundPrecision = Convert.ToDouble(boundPrecisionText);
                 maxStepNumbers = Convert.ToInt32(maxStepNumbersText);
                 integrationBound = Convert.ToDouble(integrationBoundText);
                 a = Convert.ToDouble(aText);
@@ -130,9 +130,10 @@ namespace lab1_dotnet_framework
             args += a.ToString().Replace(",", ".") + " ";
             args += b.ToString().Replace(",", ".") + " ";
             args += c.ToString().Replace(",", ".") + " ";
-            args += tableName;
+            args += tableName + " ";
+            args += integrationBound.ToString().Replace(",", ".") + " ";
 
-            args += " > C:\\sqlite\\log222.txt";
+            //args += " > C:\\sqlite\\log222.txt";
 
 
             ProcessStartInfo infoStartProcess = new ProcessStartInfo();

@@ -23,15 +23,16 @@ diff = []
 u1 = []
 u2 = []
 
-a = 0
-b = 1
-c = 1
+A = 0
+B = 1
+C = 1
 Nmax = 100  # количество итераций
 eps = 0.001  # погрешность
 e = 0.0001  # погрешность выхода на границу
 p = 4  # порядок метода
 hmin = 10 ** -5  # минимальный шаг(для метода с контролем погрешности)
 vMax = 10  # оценка для значения v( для адекватного предстваления функции решения)
+b = 2
 
 x0 = 0
 v0 = 3
@@ -42,7 +43,7 @@ taskType = "test"
 
 
 def catchParamsFromCmd():
-    global x0, v0, h, Nmax, eps, e, WC, a, b, c, taskType
+    global x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b
 
     if len(sys.argv) == 1:
         print("программа запущена со стандартными параметрами")
@@ -55,15 +56,16 @@ def catchParamsFromCmd():
     eps = float(sys.argv[5])
     e = float(sys.argv[6])
     WC = bool(int(sys.argv[7]))
-    a = float(sys.argv[8])
-    b = float(sys.argv[9])
-    c = float(sys.argv[10])
+    A = float(sys.argv[8])
+    B = float(sys.argv[9])
+    C = float(sys.argv[10])
     taskType = sys.argv[11]
+    b = float(sys.argv[12])
 
 
 catchParamsFromCmd()
 
-print(WC)
+print(x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b)
 input()
 
 def testFunc(x=0, v=0):
@@ -189,7 +191,7 @@ def RK4WC(x, v, h, Nmax, b, e, f, eps):
             vArr.append(v)
             return xArr, vArr
         if x > b:
-            x, v = methodStep(xArr[i - 1], vArr[i - 1], b - xArr[i - 1], f)
+            x, v = methodStep(xArr[i - 1], vArr[i - 1], b - xArr[i - 1], f, True)
             xArr.append(x)
             vArr.append(v)
             return xArr, vArr
@@ -237,7 +239,7 @@ def func2(u1=0, u2=0, x=0):
 
 # Для задачи параметров
 def initParams():
-    return a, b, c
+    return A, B, C
 
 
 def stepForSystem(x, v1, v2, h, f1, f2):
@@ -396,6 +398,8 @@ else:
         pass
 
 
+print("size: " , len(vi), len(v2i))
+
 connection = sqlite3.connect("../database/lab1.sqlite3")
 cursor = connection.cursor()
 
@@ -412,10 +416,17 @@ if taskType == "test":
                              hi[i], 0, 0, ui[i], diff[i]]])
 
 elif taskType == "main1":
+    cursor.execute("delete from main1 where x0=? and u0=?", [x0, v0])
     for i in range(len(xi)):
-        cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?)",
+        if WC:
+            cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
                              hi[i], C1i[i], C2i[i]]])
+        else:
+            cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
+                           [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
+                             hi[i], 0, 0]])
+
 
 else:
     pass
