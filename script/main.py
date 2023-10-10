@@ -32,7 +32,7 @@ hmin = 10 ** -5  # минимальный шаг(для метода с конт
 vMax = 10  # оценка для значения v( для адекватного предстваления функции решения)
 
 x0 = 0
-v0 = 2
+v0 = 3
 h = 0.01
 
 WC = True
@@ -42,7 +42,7 @@ taskType = "test"
 def catchParamsFromCmd():
     global x0, v0, h, Nmax, eps, e, WC, a, b, c, taskType
 
-    if (len(sys.argv) == 1):
+    if len(sys.argv) == 1:
         print("программа запущена со стандартными параметрами")
         return
 
@@ -395,10 +395,11 @@ connection = sqlite3.connect("lab1.sqlite3")
 cursor = connection.cursor()
 
 if taskType == "test":
+    cursor.execute("delete from test where x0=? and u0=?", [x0, v0])
     for i in range(len(xi)):
         cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C1i[i], C2i[i], ui[i], ui[i] - vi[i]]])
+                             hi[i], C1i[i], C2i[i], ui[i], diff[i]]])
 
 elif taskType == "main1":
     for i in range(len(xi)):

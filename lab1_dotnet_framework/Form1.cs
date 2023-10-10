@@ -101,6 +101,8 @@ namespace lab1_dotnet_framework
 
             catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl);
 
+
+
             // exec python 
             // show data for st cond (x0, u0)
             // draw graphs
@@ -212,18 +214,23 @@ namespace lab1_dotnet_framework
             }
         }
 
-        private double TrueSoluitonFunction(double X0, double U0)
+        double constant(double x0, double v0)
         {
-            return 3;
+            return v0 / Math.Exp(2 * x0);
         }
 
-        private void DrawTrueSolution(Series series, double X0, double U0, double h)
+        private double TrueSoluitonFunction(double x0, double v0, double x)
+        {
+            return Math.Exp(2 * x) * constant(x0, v0);
+        }
+
+        private void DrawTrueSolution(Series series, double x0, double u0, double h)
         {
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    series.Points.AddXY(i, i * i);
-            //}
+            for (int i = 0; i < 5; i++)
+            {
+                series.Points.AddXY(i, TrueSoluitonFunction(x0, u0, i));
+            }
         }
 
         private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0)
@@ -311,7 +318,7 @@ namespace lab1_dotnet_framework
         {
             try
             {
-                db = new DataBase("\\database\\lab1.sqlite3");
+                db = new DataBase("/../../../database/lab1.sqlite3");
             }
             catch (Exception ex)
             {
@@ -342,7 +349,7 @@ namespace lab1_dotnet_framework
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //drawGraphs();
+            executeMethod();
         }
 
         private void тестоваяToolStripMenuItem_Click(object sender, EventArgs e)
