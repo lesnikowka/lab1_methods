@@ -102,6 +102,8 @@ namespace lab1_dotnet_framework
             catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl);
 
             // exec python 
+            // show data for st cond (x0, u0)
+            // draw graphs
         }
 
         private void drawGraphs(double X0, double U0)
@@ -218,10 +220,10 @@ namespace lab1_dotnet_framework
         private void DrawTrueSolution(Series series, double X0, double U0, double h)
         {
 
-            for (int i = 0; i < 1000; i++)
-            {
-                series.Points.AddXY(i, i * i);
-            }
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    series.Points.AddXY(i, i * i);
+            //}
         }
 
         private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0)
@@ -237,30 +239,35 @@ namespace lab1_dotnet_framework
             {
                 for (int i = 0; i < data.Count; i++)
                 {
-                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][3]), Convert.ToDouble(data[i][4]));
+                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][1].Replace(".", ",")), Convert.ToDouble(data[i][2].Replace(".", ",")));
                 }
             }
             else
             {
                 for (int i = 0; i < data.Count; i++)
                 {
-                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][4]), Convert.ToDouble(data[i][5]));
+                    mainSeries.Points.AddXY(Convert.ToDouble(data[i][2].Replace(".", ",")), Convert.ToDouble(data[i][3].Replace(".", ",")));
                 }
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    derSeries.Points.AddXY(Convert.ToDouble(data[i][4]), Convert.ToDouble(data[i][0]));
+                    derSeries.Points.AddXY(Convert.ToDouble(data[i][2].Replace(".", ",")), Convert.ToDouble(data[i][0].Replace(".", ",")));
                 }
 
                 for (int i = 0; i < data.Count; i++)
                 {
-                    phaseSeries.Points.AddXY(Convert.ToDouble(data[i][5]), Convert.ToDouble(data[i][0]));
+                    phaseSeries.Points.AddXY(Convert.ToDouble(data[i][3].Replace(".", ",")), Convert.ToDouble(data[i][0].Replace(".", ",")));
                 }
             }
         }
 
-        private void ShowDataForStartCondition(string tableName, List<string> startCondition)
+        private void ShowDataForStartCondition(List<string> startCondition)
         {
+            string tableName;
+            if (selectedTask == TaskType.Test) tableName = "test";
+            else if (selectedTask == TaskType.Main1) tableName = "main1";
+            else tableName = "main2";
+
             List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
 
             table.Rows.Clear();
@@ -417,13 +424,13 @@ namespace lab1_dotnet_framework
             textBox10.Enabled = true;
         }
 
-       
-
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
             List<string> selectedCondition = stringConditionToList(comboBox1.GetItemText(comboBox1.SelectedItem));
 
-            ShowDataForStartCondition(currentTableDB, selectedCondition);
+            ShowDataForStartCondition(selectedCondition);
+
+            drawGraphs(Convert.ToDouble(selectedCondition[0].Replace(".", ",")), Convert.ToDouble(selectedCondition[1].Replace(".", ",")));
         }
     }
 }
