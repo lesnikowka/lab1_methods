@@ -156,6 +156,7 @@ namespace lab1_dotnet_framework
             infoStartProcess.WorkingDirectory = "C:\\Users\\lesni\\lab1_methods\\script";
             infoStartProcess.FileName = "main.py";
             infoStartProcess.Arguments = args;
+            infoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;
 
             methodProcess.StartInfo = infoStartProcess;
 
