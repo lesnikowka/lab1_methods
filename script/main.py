@@ -95,6 +95,13 @@ def Const(x0=0, v0=0):
 def decision(x=0, C=1):
     return (np.exp(2 * x) * C)
 
+def f1sys(x, v1, v2):
+    return v2
+
+def f2sys(x, v1, v2):
+    return A * v2 * abs(v2) + B * v2 + C * v1
+
+
 
 def methodStep(xn, vn, hn, f, withcontrol=False):
     k1 = f(xn, vn)
@@ -393,9 +400,9 @@ elif taskType == "main1":
         RK4(x0, v0, h, Nmax, b, e, fX)
 else:
     if WC:
-        pass
+        RK4WCSys(x0, v0, f2sys(x0,v0), Nmax, b, e, f1sys, f2sys, eps)
     else:
-        pass
+        RK4Sys(x0, v0, f2sys(x0,v0), Nmax, b, e, f1sys, f2sys)
 
 
 #print("size: " , len(vi), len(v2i))
@@ -427,9 +434,18 @@ elif taskType == "main1":
                            [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
                              hi[i], 0, 0]])
 
-
 else:
-    pass
+    cursor.execute("delete from main2 where x0=? and u0=?", [x0, v0])
+    for i in range(len(xi)):
+        if WC:
+            cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
+                           [[u2[i], x0, v0, i + 1, xi[i], u1[i], v2i[i], cntrl[i], olp[i],
+                             hi[i], C1i[i], C2i[i]]])
+        else:
+            cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
+                           [[u2[i], x0, v0, i + 1, xi[i], u1[i], 0, 0, 0,
+                             hi[i], 0, 0]])
+
 
 connection.commit()
 
