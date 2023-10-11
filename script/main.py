@@ -65,8 +65,8 @@ def catchParamsFromCmd():
 
 catchParamsFromCmd()
 
-print(x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b)
-input()
+#print(x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b)
+#№input()
 
 def testFunc(x=0, v=0):
     return 2 * v
@@ -398,7 +398,7 @@ else:
         pass
 
 
-print("size: " , len(vi), len(v2i))
+#print("size: " , len(vi), len(v2i))
 
 connection = sqlite3.connect("../database/lab1.sqlite3")
 cursor = connection.cursor()
@@ -452,5 +452,5 @@ connection.commit()
 # plt.show()
 
 
-print("end")
-input()
+#print("end")
+#input()
