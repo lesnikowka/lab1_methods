@@ -193,22 +193,24 @@ namespace lab1_dotnet_framework
             this.chart1.Series.Add(newNumericSeries);
             newSeriesList.Add(newNumericSeries);
 
+            Series newTrueSeries = new Series();
 
             if (selectedTask == TaskType.Test)
             {
-                Series newTrueSeries = new Series();
                 newTrueSeries.Name = "Истинное решение при X0 = " + X0.ToString() + " U0 = " + U0.ToString();
                 newTrueSeries.ChartType = SeriesChartType.Line;
                 newTrueSeries.BorderWidth = 2;
                 this.chart1.Series.Add(newTrueSeries);
                 newSeriesList.Add(newTrueSeries);
-
-                DrawTrueSolution(newTrueSeries, X0, U0, 0.1); // написать нормально 
             }
 
-            if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
+            if (selectedTask == TaskType.Test)
             {
-                DrawNumericSolution(newNumericSeries, null, null, X0, U0);
+                DrawNumericSolution(newNumericSeries, null, null, X0, U0, newTrueSeries);
+            }
+            else if (selectedTask == TaskType.Main1)
+            {
+                DrawNumericSolution(newNumericSeries, null, null, X0, U0, null);
             }
             else
             {
@@ -227,7 +229,7 @@ namespace lab1_dotnet_framework
                 this.chart2.Series.Add(newPhaseSeries);
                 newSeriesList.Add(newPhaseSeries);
 
-                DrawNumericSolution(newNumericSeries, newDerivativeSeries, newPhaseSeries, X0, U0);
+                DrawNumericSolution(newNumericSeries, newDerivativeSeries, newPhaseSeries, X0, U0, null);
             }
 
             SeriesForStartConditions.Add(x0u0Tuple, newSeriesList);
@@ -294,16 +296,16 @@ namespace lab1_dotnet_framework
             return Math.Exp(2 * x) * constant(x0, v0);
         }
 
-        private void DrawTrueSolution(Series series, double x0, double u0, double h)
+        private void DrawTrueSolution(Series series, double x0, double u0, List<double> X)
         {
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    series.Points.AddXY(i, TrueSoluitonFunction(x0, u0, i));
-            //}
+            for (int i = 0; i < X.Count; i++)
+            {
+                series.Points.AddXY(X[i], TrueSoluitonFunction(x0, u0, X[i]));
+            }
         }
 
-        private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0)
+        private void DrawNumericSolution(Series mainSeries, Series derSeries, Series phaseSeries, double X0, double U0, Series testSeries)
         {
             string tableName;
             if (selectedTask == TaskType.Test) tableName = "test";
@@ -314,9 +316,17 @@ namespace lab1_dotnet_framework
 
             if (selectedTask == TaskType.Test || selectedTask == TaskType.Main1)
             {
+                List<double> X = new List<double>();
+
                 for (int i = 0; i < data.Count; i++)
                 {
                     mainSeries.Points.AddXY(Convert.ToDouble(data[i][1].Replace(".", ",")), Convert.ToDouble(data[i][2].Replace(".", ",")));
+                    X.Add(Convert.ToDouble(data[i][1].Replace(".", ",")));
+                }
+
+                if (selectedTask == TaskType.Test)
+                {
+                    DrawTrueSolution(testSeries, X0, U0, X);
                 }
             }
             else
