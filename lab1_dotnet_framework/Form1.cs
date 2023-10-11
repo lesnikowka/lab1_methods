@@ -49,7 +49,7 @@ namespace lab1_dotnet_framework
             
         }
 
-        private void catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
+        private int catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
         {
             string x0Text = textBox1.Text;
             string u0Text = textBox2.Text;
@@ -70,7 +70,7 @@ namespace lab1_dotnet_framework
                 )
             {
                 MessageBox.Show("Вы не ввели начальные условия", "Ошибка");
-                return;
+                return -1;
             }
 
             pointsToCommas(ref x0Text);
@@ -99,10 +99,18 @@ namespace lab1_dotnet_framework
             catch
             {
                 MessageBox.Show("Неверный формат введенных значений", "Ошибка");
-                return;
+                return -1;
+            }
+
+            if (X0 + startStep > integrationBound)
+            {
+                MessageBox.Show("Некорректная граница интегрирования", "Ошибка");
+                return -1;
             }
 
             withControl = checkBox1.Checked;
+
+            return 0;
         }
         
         private void executeMethod()
@@ -116,7 +124,12 @@ namespace lab1_dotnet_framework
             else if (selectedTask == TaskType.Main1) tableName = "main1";
             else tableName = "main2";
 
-            catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl, ref a, ref b, ref c);
+            int valid = catchParams(ref X0, ref U0, ref startStep, ref localPrecision, ref boundPrecision, ref integrationBound, ref maxStepNumbers, ref withControl, ref a, ref b, ref c);
+
+            if (valid != 0)
+            {
+                return;
+            }
 
             string args = "";
 
