@@ -46,7 +46,9 @@ namespace lab1_dotnet_framework
             chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
             chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
 
-            
+            chart1.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
+            chart2.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
+            chart3.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
         }
 
         private int catchParams(ref double X0, ref double U0, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
