@@ -121,7 +121,17 @@ namespace lab1_dotnet_framework
                 columnNamesString = columnNamesMain2String; 
             }
 
-            command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " + startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") + ";";
+            if (table != "main2")
+            {
+                command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " 
+                    + startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") + ";";
+            }
+            else
+            {
+                command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " + 
+                    startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") 
+                    + " and u0der = " + startCondition[2].Replace(",",".") + ";";
+            }
 
             SqliteDataReader reader =  command.ExecuteReader();
 

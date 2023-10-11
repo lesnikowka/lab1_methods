@@ -36,6 +36,7 @@ b = 2
 
 x0 = 0
 v0 = 3
+v0der = 0
 h = 0.01
 
 WC = True
@@ -61,9 +62,14 @@ def catchParamsFromCmd():
     C = float(sys.argv[10])
     taskType = sys.argv[11]
     b = float(sys.argv[12])
-
+    v0der = float(sys.argv[13])
 
 catchParamsFromCmd()
+
+
+#print(b)
+#input()
+
 
 #print(x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b)
 #№input()
@@ -400,9 +406,9 @@ elif taskType == "main1":
         RK4(x0, v0, h, Nmax, b, e, fX)
 else:
     if WC:
-        RK4WCSys(x0, v0, f2sys(x0,v0), Nmax, b, e, f1sys, f2sys, eps)
+        RK4WCSys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys, eps)
     else:
-        RK4Sys(x0, v0, f2sys(x0,v0), Nmax, b, e, f1sys, f2sys)
+        RK4Sys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys)
 
 
 #print("size: " , len(vi), len(v2i))
@@ -448,6 +454,8 @@ else:
 
 
 connection.commit()
+
+print(xi)
 
 
 # xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
