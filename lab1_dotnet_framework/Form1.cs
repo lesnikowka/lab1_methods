@@ -299,7 +299,10 @@ namespace lab1_dotnet_framework
 
             for (int i = 0; i < startConditions.Count; i++)
             {
-                comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1]);
+                if (tableName != "main2")
+                    comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1]);
+                else
+                    comboBox1.Items.Add(startConditions[i][0] + ", " + startConditions[i][1] + ", " + startConditions[i][2]);
             }
         }
 
@@ -397,6 +400,15 @@ namespace lab1_dotnet_framework
 
             startCondition.Add(startConditionString.Substring(0, commaIndex));
             startCondition.Add(startConditionString.Substring(commaIndex + 2));
+
+            string cropped = startConditionString.Substring(commaIndex + 1);
+
+            int secondCommaIndex = cropped.IndexOf(",");
+
+            if (secondCommaIndex != -1)
+                startCondition.Add(startConditionString.Substring(secondCommaIndex + 2));
+            else
+                startCondition.Add("0");
 
             return startCondition;
         }

@@ -78,7 +78,10 @@ namespace lab1_dotnet_framework
 
             SqliteCommand command = connection.CreateCommand();
 
-            command.CommandText = "select distinct x0, u0 from " + table + ";";
+            if (table != "main2") 
+                command.CommandText =   "select distinct x0, u0 from " + table + ";";
+            else
+                command.CommandText = "select distinct x0, u0, u0der from " + table + ";";
 
             SqliteDataReader reader = command.ExecuteReader();
 
