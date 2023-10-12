@@ -53,17 +53,17 @@ namespace lab1_dotnet_framework
 
         private int catchParams(ref double X0, ref double U0, ref double U0der, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
         {
-            string x0Text = textBox1.Text;
-            string u0Text = textBox2.Text;
-            string startStepText = textBox3.Text;
-            string localPrecisionText = textBox4.Text;
-            string boundPrecisionText = textBox5.Text;
-            string maxStepNumbersText = textBox6.Text;
-            string integrationBoundText = textBox7.Text;
-            string aText = textBox8.Text;
-            string bText = textBox9.Text;
-            string cText = textBox10.Text;
-            string u0derText = textBox11.Text;
+            string x0Text = pointsToCommas(textBox1.Text);
+            string u0Text = pointsToCommas(textBox2.Text);
+            string startStepText = pointsToCommas(textBox3.Text);
+            string localPrecisionText = pointsToCommas(textBox4.Text);
+            string boundPrecisionText = pointsToCommas(textBox5.Text);
+            string maxStepNumbersText = pointsToCommas(textBox6.Text);
+            string integrationBoundText = pointsToCommas(textBox7.Text);
+            string aText = pointsToCommas(textBox8.Text);
+            string bText = pointsToCommas(textBox9.Text);
+            string cText = pointsToCommas(textBox10.Text);
+            string u0derText = pointsToCommas(textBox11.Text);
 
             if (x0Text.Length == 0 || u0Text.Length == 0 ||
                 startStepText.Length == 0 || localPrecisionText.Length == 0 ||
@@ -75,17 +75,6 @@ namespace lab1_dotnet_framework
                 MessageBox.Show("Вы ввели не все параметры", "Ошибка");
                 return -1;
             }
-
-            pointsToCommas(ref x0Text);
-            pointsToCommas(ref u0Text);
-            pointsToCommas(ref startStepText);
-            pointsToCommas(ref localPrecisionText);
-            pointsToCommas(ref boundPrecisionText);
-            pointsToCommas(ref integrationBoundText);
-            pointsToCommas(ref aText);
-            pointsToCommas(ref bText);
-            pointsToCommas(ref cText);
-            pointsToCommas(ref u0derText);
 
             try
             {
@@ -281,9 +270,9 @@ namespace lab1_dotnet_framework
             }
         }
 
-        private void pointsToCommas(ref string s)
+        private string pointsToCommas(string s)
         {
-            s = s.Replace('.', ',');
+            return s.Replace('.', ',');
         }
 
         private double stringToDouble(string s)
