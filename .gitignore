@@ -1,4 +1,6 @@
-.vs/
 lab1_dotnet_framework/bin
 lab1_dotnet_framework/obj
 packages/
+.vs/
+obj/Debug
+obj/Debug/TempPE
