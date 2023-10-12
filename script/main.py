@@ -396,14 +396,14 @@ def RK4WCSys(x, v1, v2, h, Nmax, b, e, f1, f2, eps):
 
 if taskType == "test":
     if WC:
+        RK4WC(x0, v0, h, Nmax, b, e, testFunc, eps)
+    else:
+        RK4(x0, v0, h, Nmax, b, e, testFunc)
+elif taskType == "main1":
+    if WC:
         RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
     else:
         RK4(x0, v0, h, Nmax, b, e, fTask1)
-elif taskType == "main1":
-    if WC:
-        RK4WC(x0, v0, h, Nmax, b, e, fX, eps)
-    else:
-        RK4(x0, v0, h, Nmax, b, e, fX)
 else:
     if WC:
         RK4WCSys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys, eps)
@@ -458,7 +458,7 @@ connection.commit()
 print(xi)
 
 
-# xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
+#xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
 # Для тестовой задачи
 # x1Arr = []
 # i = 0
