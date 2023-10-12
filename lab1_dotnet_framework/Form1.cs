@@ -388,7 +388,7 @@ namespace lab1_dotnet_framework
             }
         }
 
-        ///сделать для 3х параметров
+        ////сделать для 3х параметров
         List<string> stringConditionToList(string startConditionString) 
         {
             List<string> startCondition = new List<string>();
