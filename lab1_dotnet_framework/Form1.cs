@@ -30,8 +30,8 @@ namespace lab1_dotnet_framework
         private DataTable table = new DataTable();
         private DataTable table2 = new DataTable();
 
-        private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2", "u", "u-v" };
-        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "v'i", "v'2i", "v'i-v'2i", "loc_prec", "hi", "c1", "c2" };
+        private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "vi-v2i", "olp", "hi", "c1", "c2", "u", "u-v" };
+        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "v'i", "v'2i", "v'i-v'2i", "olp", "hi", "c1", "c2" };
 
         private Dictionary<Tuple<double, double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double, double>, List<Series>>();
 
@@ -470,9 +470,70 @@ namespace lab1_dotnet_framework
             return startCondition;
         }
 
-        private string getInfo(List<string> table)
+        private string getInfo(DataTable table)
         {
+            if (table.Rows.Count == 0)
+            {
+                return "";
+            }
+
+            int n = table.Rows.Count, C1sum = 0, C2sum = 0, maxHiXi = 0, minHiXi = 0, maxuiviXi = 0;
+            double maxHi = Convert.ToDouble(table.Rows[0].Field<string>("hi"));
+            double minHi = Convert.ToDouble(table.Rows[0].Field<string>("hi"));
+            double maxOlp = 0;
+            double maxuivi = 0;
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                C1sum += Convert.ToInt32(table.Rows[i].Field<string>("C1"));
+                C2sum += Convert.ToInt32(table.Rows[i].Field<string>("C2"));
+
+                double hitmp = Convert.ToDouble(table.Rows[i].Field<string>("hi"));
+
+                if (hitmp > maxHi)
+                {
+                    maxHi = hitmp;
+                    maxHiXi = i;
+                }
+                if (hitmp < minHi)
+                {
+                    minHi = hitmp;
+                    minHiXi = i;
+                }
+
+                double olptmp = Convert.ToDouble(table.Rows[i].Field<string>("olp"));
+
+                maxOlp = olptmp > maxOlp ? olptmp : maxOlp;
+            }
+
             return "";
+        }
+
+        private void showParameters(List<string> startCondition) 
+        {
+            string tableName = getTableString();
+
+            List<string> parameters = db.GetParameters(tableName, startCondition);
+
+            textBox1.Text = parameters[1];
+            textBox2.Text = parameters[2];
+            textBox11.Text = parameters[3];
+            textBox7.Text = parameters[4];
+            textBox3.Text = parameters[5];
+            textBox4.Text = parameters[6];
+            textBox5.Text = parameters[7];
+            textBox6.Text = parameters[8];
+            textBox8.Text = parameters[9];
+            textBox9.Text = parameters[10];
+            textBox10.Text = parameters[11];
+
+            int cntrl = Convert.ToInt32(parameters[12]);
+
+            if (cntrl == 1)
+                checkBox1.Checked = true;
+
+            else
+                checkBox1.Checked = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -579,6 +640,9 @@ namespace lab1_dotnet_framework
             ShowDataForStartCondition(selectedCondition);
 
             drawGraphs(selectedCondition);
+
+            showParameters(selectedCondition);
+
         }
     }
 }

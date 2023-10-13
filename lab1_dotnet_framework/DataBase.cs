@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
+using System.Security.Cryptography;
 
 namespace lab1_dotnet_framework
 {
@@ -150,55 +152,48 @@ namespace lab1_dotnet_framework
             return data;
         }
 
-        //public void writeDataForStartCondition(string table, List<string> startCondition, List<List<string>> data)
-        //{
-        //    SqliteConnection connection = GetConnection();
-        //
-        //    SqliteCommand commandRemoving = connection.CreateCommand();
-        //
-        //    commandRemoving.CommandText = "delete from " + table + " where x0 = " + startCondition[0] + " and u0 = " + startCondition[1] + ";";
-        //
-        //    commandRemoving.ExecuteNonQuery();
-        //
-        //    for (int i = 0; i < data.Count; i++)
-        //    {
-        //
-        //        SqliteCommand commandAdding = connection.CreateCommand();
-        //
-        //        commandAdding.CommandText = "insert into " + table + "(";
-        //
-        //        if (table == "test2")
-        //        {
-        //            commandAdding.CommandText += "u2, ";
-        //        }
-        //
-        //
-        //
-        //        commandAdding.CommandText += "x0, u0, id, x, v, v2, v_v2, loc_prec, h, c1, c2";
-        //
-        //        if (table == "test")
-        //        {
-        //            commandAdding.CommandText += ", u, u_v";
-        //        }
-        //
-        //        commandAdding.CommandText += ") values(";
-        //
-        //        commandAdding.CommandText += startCondition[0] + ", " + startCondition[1] + ", ";
-        //
-        //        for (int j = 0; j < data[i].Count; j++)
-        //        {
-        //            commandAdding.CommandText += data[i][j] + ", ";
-        //        }
-        //
-        //        commandAdding.CommandText = commandAdding.CommandText.Substring(0, commandAdding.CommandText.Length - 1);
-        //
-        //        commandAdding.CommandText += ");";
-        //
-        //        commandAdding.ExecuteNonQuery();
-        //    }
-        //    
-        //    connection.Close();
-        //}
+        public void SaveParameters(List<string> parameters, string table)
+        {
+            SqliteConnection connection = GetConnection();
+
+            SqliteCommand command = connection.CreateCommand();
+
+            command.CommandText = "insert into " + table + " values(" + table + " ";
+
+            for (int i = 0; i < parameters.Count; i++) 
+            {
+                command.CommandText += parameters[i] + " ";
+            }
+
+            command.CommandText += ");";
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        public List<string> GetParameters(string table, List<string> startCondition)
+        {
+            SqliteConnection connection = GetConnection();
+            SqliteCommand command = connection.CreateCommand();
+
+            command.CommandText = "select * from " + table + " where x0 = " + startCondition[0]
+                + " and u0 = " + startCondition[1] + " and u0der = " + startCondition[2] + ";";
+
+            SqliteDataReader reader = command.ExecuteReader();
+            reader.Read();
+
+            List<string> parameters = new List<string>();
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                parameters.Add(reader.GetString(i));
+            }
+
+            connection.Close();
+
+            return parameters;  
+        }
     }
 }
     
