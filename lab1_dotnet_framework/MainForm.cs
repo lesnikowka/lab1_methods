@@ -13,6 +13,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Numerics;
 using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Globalization;
 
 namespace lab1_dotnet_framework
 {
@@ -515,53 +516,54 @@ namespace lab1_dotnet_framework
 
             string s = table.Rows[0][6].ToString();
 
-            double maxHi = Convert.ToDouble(pointsToCommas(curTable.Rows[0][6].ToString()));
-            double minHi = Convert.ToDouble(pointsToCommas(curTable.Rows[0][6].ToString()));
+            double maxHi = Convert.ToDouble(curTable.Rows[0][6].ToString(), CultureInfo.InvariantCulture);
+            double minHi = Convert.ToDouble(curTable.Rows[0][6].ToString(), CultureInfo.InvariantCulture);
             double maxOlp = 0;
             double maxuivi = 0;
-            double bxn = Convert.ToDouble(pointsToCommas(textBox7.Text)) - Convert.ToDouble(pointsToCommas(curTable.Rows[curTable.Rows.Count - 1][1].ToString()));
+            double xn = Convert.ToDouble(curTable.Rows[curTable.Rows.Count - 1][1].ToString(), CultureInfo.InvariantCulture);
+            double bxn = Convert.ToDouble(pointsToCommas(textBox7.Text)) - xn;
 
             string resultInfo = "";
 
-            for (int i = 0; i < curTable.Rows.Count; i++)
+            for (int i = 0; i < curTable.Rows.Count - 1; i++)
             {
 
 
                 C1sum += Convert.ToInt32(curTable.Rows[i][7]);
                 C2sum += Convert.ToInt32(curTable.Rows[i][8]);
 
-                double hitmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][6].ToString()));
+                double hitmp = Convert.ToDouble(curTable.Rows[i][6].ToString(), CultureInfo.InvariantCulture);
 
                 if (hitmp > maxHi)
                 {
                     maxHi = hitmp;
-                    maxHiXi = i;
+                    maxHiXi = i + 1;
                 }
                 if (hitmp < minHi)
                 {
                     minHi = hitmp;
-                    minHiXi = i;
+                    minHiXi = i + 1;
                 }
+                
+                double olptmp = Convert.ToDouble(curTable.Rows[i][5].ToString(), CultureInfo.InvariantCulture);
 
-                double olptmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][5].ToString()));
-
-                maxOlp = olptmp > maxOlp ? olptmp : maxOlp;
+                maxOlp = Math.Abs(olptmp) > maxOlp ? Math.Abs(olptmp) : maxOlp;
 
                 if (selectedTask == TaskType.Test)
                 {
-                    double uivitmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][10].ToString()));
+                    double uivitmp = Convert.ToDouble(curTable.Rows[i][10].ToString(), CultureInfo.InvariantCulture);
 
-                    if (uivitmp > maxuivi)
+                    if (Math.Abs(uivitmp) > maxuivi)
                     {
-                        maxuivi = uivitmp;
-                        maxuiviXi = i;
+                        maxuivi = Math.Abs(uivitmp);
+                        maxuiviXi = i + 1;
                     }
                 }
             }
 
             resultInfo += "n = " + n.ToString() + "\n"; 
             resultInfo += "b - xn = " + bxn.ToString() + "\n";
-            if(cntrl) resultInfo += "Макс. ОЛП = " + bxn.ToString() + "\n";
+            if(cntrl) resultInfo += "Макс. ОЛП = " + maxOlp.ToString() + "\n";
             if (cntrl) resultInfo += "Удвоений: " + C2sum.ToString() + "\n";
             if (cntrl) resultInfo += "Делений: " + C1sum.ToString() + "\n";
             if (cntrl) resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
