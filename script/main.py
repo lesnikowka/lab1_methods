@@ -5,7 +5,6 @@ import sys
 import sqlite3
 import os
 
-
 # массивы для таблицы задание 1 и тестовое
 xi = []
 vi = []
@@ -18,7 +17,6 @@ C2 = 0
 C1i = []
 C2i = []
 ui = []
-diff = []
 # + массивы для 2-го задания
 u1 = []
 u2 = []
@@ -40,7 +38,7 @@ h = 0.01
 WC = True
 taskType = "test"
 
-maximum_derivative = 10**8
+maximum_derivative = 10 ** 8
 
 
 def catchParamsFromCmd():
@@ -64,15 +62,104 @@ def catchParamsFromCmd():
     b = float(sys.argv[12])
     v0der = float(sys.argv[13])
 
-catchParamsFromCmd()
+
+def eraseEndValues():
+    if (len(xi)):
+        xi[len(xi) - 1] = 0
+    if (len(vi)):
+        vi[len(vi) - 1] = 0
+    if (len(v2i)):
+        v2i[len(v2i) - 1] = 0
+    if (len(cntrl)):
+        cntrl[len(cntrl) - 1] = 0
+    if (len(olp)):
+        olp[len(olp) - 1] = 0
+    if (len(hi)):
+        hi[len(hi) - 1] = 0
+    if (len(C1i)):
+        C1i[len(C1i) - 1] = 0
+    if (len(C2i)):
+        C2i[len(C2i) - 1] = 0
+    if (len(ui)):
+        ui[len(ui) - 1] = 0
+    if (len(u1)):
+        u1[len(u1) - 1] = 0
+    if (len(u2)):
+        u2[len(u2) - 1] = 0
 
 
-#print(b)
-#input()
+def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
+    olp.append(S)
+    xi.append(xn)
+    vi.append(vn)
+    hi.append(hn)
+    v2i.append(v2n)
+    cntrl.append(cntrln)
+    C1i.append(c1)
+    C2i.append(c2)
+    ui.append(un)
 
 
-#print(x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b)
-#№input()
+def saveToDatabase():
+    connection = sqlite3.connect("../database/lab1.sqlite3")
+    cursor = connection.cursor()
+
+    if taskType == "test":
+        cursor.execute("delete from test where x0=? and u0=?", [x0, v0])
+        for i in range(len(xi)):
+            if WC:
+                cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
+                                     hi[i], C2i[i], C1i[i], ui[i], ui[i] - vi[i]]])
+            else:
+                cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
+                                     h, 0, 0, ui[i], ui[i] - vi[i]]])
+
+    elif taskType == "main1":
+        cursor.execute("delete from main1 where x0=? and u0=?", [x0, v0])
+        for i in range(len(xi)):
+            if WC:
+                cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
+                                     hi[i], C2i[i], C1i[i]]])
+            else:
+                cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
+                                     h, 0, 0]])
+
+    else:
+        cursor.execute("delete from main2 where x0=? and u0=?", [x0, v0])
+        for i in range(len(xi)):
+            if WC:
+                cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[u2[i], x0, v0, i + 1, xi[i], u1[i], v2i[i], cntrl[i], olp[i],
+                                     hi[i], C2i[i], C1i[i], v0der]])
+            else:
+                cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[u2[i], x0, v0, i + 1, xi[i], u1[i], 0, 0, 0,
+                                     h, 0, 0, v0der]])
+
+    connection.commit()
+
+
+def startCalculation():
+    if taskType == "test":
+        if WC:
+            RK4WC(x0, v0, h, Nmax, b, e, testFunc, eps)
+        else:
+            RK4(x0, v0, h, Nmax, b, e, testFunc)
+    elif taskType == "main1":
+        if WC:
+            RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
+        else:
+            RK4(x0, v0, h, Nmax, b, e, fTask1)
+    else:
+        if WC:
+            RK4WCSys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys, eps)
+        else:
+            RK4Sys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys)
+
 
 def testFunc(x=0, v=0):
     return 2 * v
@@ -101,12 +188,13 @@ def Const(x0=0, v0=0):
 def decision(x=0, C=1):
     return (np.exp(2 * x) * C)
 
+
 def f1sys(x, v1, v2):
     return v2
 
+
 def f2sys(x, v1, v2):
     return A * v2 * abs(v2) + B * v2 + C * v1
-
 
 
 def methodStep(xn, vn, hn, f, withcontrol=False):
@@ -121,7 +209,6 @@ def methodStep(xn, vn, hn, f, withcontrol=False):
         vi.append(v)
         hi.append(hn)
         ui.append(decision(xn, Const(x0, v0)))
-        diff.append(decision(xn, Const(x0, v0))-vn)
     return x, v
 
 
@@ -137,29 +224,13 @@ def stepWithControl(x, v, h, f, eps):
     oldC2 = C2
 
     if abs(S) >= eps / 2 ** (p + 1) and abs(S) <= eps:
-        olp.append(S)
-        xi.append(xn)
-        vi.append(vn)
-        hi.append(h)
-        v2i.append(vNext)
-        cntrl.append(vNext - vn)
-        C1i.append(C1 - oldC1)
-        C2i.append(C2 - oldC2)
-        ui.append(decision(xn, Const(x0, v0)))
-        diff.append(decision(xn, Const(x0, v0))-vn)
+        saveCurrentValues(S, xn, vn, h, vNext, vNext - vn, C1 - oldC1, C2 - oldC2, decision(xn, Const(x0, v0)))
+
         return xn, vn, h
     elif abs(S) < eps / 2 ** (p + 1):
-        olp.append(S)
-        xi.append(xn)
-        vi.append(vn)
-        hi.append(h)
-        v2i.append(vNext)
-        cntrl.append(vNext - vn)
         C1 += 1
-        C1i.append(C1 - oldC1)
-        C2i.append(C2 - oldC2)
-        ui.append(decision(xn, Const(x0, v0)))
-        diff.append(decision(xn, Const(x0, v0))-vn)
+
+        saveCurrentValues(S, xn, vn, h, vNext, vNext - vn, C1 - oldC1, C2 - oldC2, decision(xn, Const(x0, v0)))
         return xn, vn, h * 2
     else:
         while abs(S) > eps:
@@ -169,16 +240,9 @@ def stepWithControl(x, v, h, f, eps):
             xHalf, vHalf = methodStep(x, v, h / 2, f, True)
             xNext, vNext = methodStep(xHalf, vHalf, h / 2, f, True)
             S = (vNext - vn) / (2 ** p - 1)
-        olp.append(S)
-        xi.append(xn)
-        vi.append(vn)
-        hi.append(h)
-        v2i.append(vNext)
-        cntrl.append(vNext - vn)
-        C1i.append(C1 - oldC1)
-        C2i.append(C2 - oldC2)
-        ui.append(decision(xn, Const(x0, v0)))
-        diff.append(decision(xn, Const(x0, v0))-vn)
+
+        saveCurrentValues(S, xn, vn, h, vNext, vNext - vn, C1 - oldC1, C2 - oldC2, decision(xn, Const(x0, v0)))
+
         return xn, vn, h
 
 
@@ -207,6 +271,9 @@ def RK4WC(x, v, h, Nmax, b, e, f, eps):
             x, v = methodStep(xArr[i - 1], vArr[i - 1], b - xArr[i - 1], f, True)
             xArr.append(x)
             vArr.append(v)
+            eraseEndValues()
+            xi[len(xi) - 1] = x
+            vi[len(xi) - 1] = v
             return xArr, vArr
         xArr.append(x)
         vArr.append(v)
@@ -234,6 +301,9 @@ def RK4(x, v, h, Nmax, b, e, f):
             x, v = methodStep(xArr[i - 1], vArr[i - 1], b - xArr[i - 1], f)
             xArr.append(x)
             vArr.append(v)
+            eraseEndValues()
+            xi[len(xi) - 1] = x
+            vi[len(xi) - 1] = v
             return xArr, vArr
         xArr.append(x)
         vArr.append(v)
@@ -255,28 +325,29 @@ def initParams():
     return A, B, C
 
 
-def stepForSystem(x, v1, v2, h, f1, f2):
-    k11 = f1(x, v1)
-    k21 = f1(x + h / 2, v1 + h / 2 * k11)
-    k31 = f1(x + h / 2, v1 + h / 2 * k21)
-    k41 = f1(x + h, v1 + h * k31)
-    k12 = f2(x, v2)
-    k22 = f2(x + h / 2, v2 + h / 2 * k12)
-    k32 = f2(x + h / 2, v2 + h / 2 * k22)
-    k42 = f2(x + h, v2 + h * k32)
+def stepForSystem(x, v1, v2, h, f1, f2, withControl=False):
+    k11 = f1(x, v1, v2)
+    k12 = f2(x, v1, v2)
+    k21 = f1(x + h / 2, v1 + h / 2 * k11, v2 + h / 2 * k12)
+    k22 = f2(x + h / 2, v1 + h / 2 * k11, v2 + h / 2 * k12)
+    k31 = f1(x + h / 2, v1 + h / 2 * k21, v2 + h / 2 * k22)
+    k32 = f2(x + h / 2, v1 + h / 2 * k21, v2 + h / 2 * k22)
+    k41 = f1(x + h, v1 + h * k31, v2 + h * k32)
+    k42 = f2(x + h, v1 + h * k31, v2 + h * k32)
     xn = x + h
     vn1 = v1 + h / 6 * (k11 + 2 * k21 + 2 * k31 + k41)
     vn2 = v2 + h / 6 * (k12 + 2 * k22 + 2 * k32 + k42)
-    xi.append(xn)
-    u1.append(vn1)
-    u2.append(vn2)
+    if not withControl:
+        xi.append(xn)
+        u1.append(vn1)
+        u2.append(vn2)
     return x, vn1, vn2
 
 
 def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
-    xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2)
-    xHalf, v1Half, v2Half = stepForSystem(x, v1, v2, h, f1, f2)
-    xNext, v1Next, v2Next = stepForSystem(x, v1Half, v2Half, h, f1, f2)
+    xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2, True)
+    xHalf, v1Half, v2Half = stepForSystem(x, v1, v2, h, f1, f2, True)
+    xNext, v1Next, v2Next = stepForSystem(x, v1Half, v2Half, h, f1, f2, True)
 
     S1 = (v1Next - vn1) / (2 ** p - 1)
     S2 = (v2Next - vn2) / (2 ** p - 1)
@@ -307,9 +378,9 @@ def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
             global C2
             C2 += 1
             h /= 2
-            xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2)
-            xHalf, v1Half, v2Half = stepForSystem(x, v1, v2, h, f1, f2)
-            xNext, v1Next, v2Next = stepForSystem(x, v1Half, v2Half, h, f1, f2)
+            xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2, True)
+            xHalf, v1Half, v2Half = stepForSystem(x, v1, v2, h, f1, f2, True)
+            xNext, v1Next, v2Next = stepForSystem(x, v1Half, v2Half, h, f1, f2, True)
             S1 = (v1Next - vn1) / (2 ** p - 1)
             S2 = (v2Next - vn2) / (2 ** p - 1)
             S = max(abs(S1), abs(S2))
@@ -334,7 +405,7 @@ def RK4Sys(x, v1, v2, h, Nmax, b, e, f1, f2):
 
     for i in range(1, Nmax + 1):
         x, v1, v2 = stepForSystem(x, v1, v2, h, f1, f2)
-        if v1 > vMax:
+        if f1(x, v1, v2) > maximum_derivative or f2(x, v1, v2) > maximum_derivative:
             xArr.append(x)
             v1Arr.append(v1)
             v2Arr.append(v2)
@@ -366,8 +437,8 @@ def RK4WCSys(x, v1, v2, h, Nmax, b, e, f1, f2, eps):
     v2Arr.append(v2)
 
     for i in range(1, Nmax + 1):
-        x, v1, v2 = stepForSystemWithControl(x, v1, v2, h, f1, f2, eps)
-        if v1 > vMax:
+        x, v1, v2, h = stepForSystemWithControl(x, v1, v2, h, f1, f2, eps)
+        if f1(x, v1, v2) > maximum_derivative or f2(x, v1, v2) > maximum_derivative:
             xArr.append(x)
             v1Arr.append(v1)
             v2Arr.append(v2)
@@ -394,87 +465,8 @@ def RK4WCSys(x, v1, v2, h, Nmax, b, e, f1, f2, eps):
     return xArr, v1Arr, v2Arr
 
 
-if taskType == "test":
-    if WC:
-        RK4WC(x0, v0, h, Nmax, b, e, testFunc, eps)
-    else:
-        RK4(x0, v0, h, Nmax, b, e, testFunc)
-elif taskType == "main1":
-    if WC:
-        RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
-    else:
-        RK4(x0, v0, h, Nmax, b, e, fTask1)
-else:
-    if WC:
-        RK4WCSys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys, eps)
-    else:
-        RK4Sys(x0, v0, v0der, h, Nmax, b, e, f1sys, f2sys)
+catchParamsFromCmd()
 
+startCalculation()
 
-#print("size: " , len(vi), len(v2i))
-
-connection = sqlite3.connect("../database/lab1.sqlite3")
-cursor = connection.cursor()
-
-if taskType == "test":
-    cursor.execute("delete from test where x0=? and u0=?", [x0, v0])
-    for i in range(len(xi)):
-        if WC:
-            cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C2i[i], C1i[i], ui[i], diff[i]]])
-        else:
-            cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
-                             hi[i], 0, 0, ui[i], diff[i]]])
-
-elif taskType == "main1":
-    cursor.execute("delete from main1 where x0=? and u0=?", [x0, v0])
-    for i in range(len(xi)):
-        if WC:
-            cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C2i[i], C1i[i]]])
-        else:
-            cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
-                           [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
-                             hi[i], 0, 0]])
-
-else:
-    cursor.execute("delete from main2 where x0=? and u0=?", [x0, v0])
-    for i in range(len(xi)):
-        if WC:
-            cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
-                           [[u2[i], x0, v0, i + 1, xi[i], u1[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C2i[i], C1i[i]]])
-        else:
-            cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
-                           [[u2[i], x0, v0, i + 1, xi[i], u1[i], 0, 0, 0,
-                             hi[i], 0, 0]])
-
-
-connection.commit()
-
-print(xi)
-
-
-#xArr, vArr = RK4WC(x0, v0, h, Nmax, b, e, fTask1, eps)
-# Для тестовой задачи
-# x1Arr = []
-# i = 0
-# while (i<=b):
-#    x1Arr.append(i)
-#    u1.append(decision(i))
-#    diff.append(u1[i] - vi[i])
-#    i += h
-
-# plt.plot(xArr, vArr, color='red')
-# plt.grid()
-# plt.show()
-# plt.plot(x1Arr, v1Arr, color = 'blue')
-# plt.grid()
-# plt.show()
-
-
-#print("end")
-#input()
+saveToDatabase()
