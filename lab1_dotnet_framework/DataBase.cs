@@ -112,29 +112,21 @@ namespace lab1_dotnet_framework
 
             string columnNamesString;
 
-            if (table == "test") 
+            switch (table)
             {
-                columnNamesString = columnNamesTestString;
-            }
-            else if(table == "main1")
-            {
-                columnNamesString = columnNamesMain1String;
-            }
-            else { 
-                columnNamesString = columnNamesMain2String; 
+                case "test": columnNamesString = columnNamesTestString; break;
+                case "main1": columnNamesString = columnNamesMain1String; break;
+                default: columnNamesString = columnNamesMain2String; break;
             }
 
-            if (table != "main2")
-            {
-                command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " 
-                    + startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") + ";";
-            }
-            else
-            {
-                command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = " + 
-                    startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".") 
-                    + " and u0der = " + startCondition[2].Replace(",",".") + ";";
-            }
+            string query = command.CommandText = "select " + columnNamesString + " from " + table + " where x0 = "
+                    + startCondition[0].Replace(",", ".") + " and u0 = " + startCondition[1].Replace(",", ".");
+
+            if (table == "main2" || table == "main2der")
+                query += " and u0der = " + startCondition[2].Replace(",", ".");
+
+            query += ";";
+
 
             SqliteDataReader reader =  command.ExecuteReader();
 

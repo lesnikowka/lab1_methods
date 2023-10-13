@@ -31,7 +31,7 @@ namespace lab1_dotnet_framework
         private DataTable table2 = new DataTable();
 
         private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2", "u", "u-v" };
-        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "u'i", "v2i", "vi-v2i", "loc_prec", "hi", "c1", "c2" };
+        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "v'i", "v'2i", "v'i-v'2i", "loc_prec", "hi", "c1", "c2" };
 
         private Dictionary<Tuple<double, double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double, double>, List<Series>>();
 
@@ -367,12 +367,20 @@ namespace lab1_dotnet_framework
 
         private void ShowDataForStartCondition(List<string> startCondition)
         {
+            table.Rows.Clear();
+            table2.Rows.Clear();
+
+            addDataToPrimaryTable(startCondition);
+
+            if (selectedTask == TaskType.Main2)
+                addDataToDerivativeTable(startCondition);
+        }
+
+        private void addDataToPrimaryTable(List<string> startCondition)
+        {
             string tableName = getTableString();
 
             List<List<string>> dataForStartCondition = db.GetDataForStartCondition(tableName, startCondition);
-
-            table.Rows.Clear();
-            table2.Rows.Clear();
 
             int columnNamesSize = tableName == "test" ? columnNames.Count : columnNames.Count - 2;
 
@@ -383,7 +391,6 @@ namespace lab1_dotnet_framework
                 for (int j = 0; j < columnNamesSize; j++)
                 {
                     int j_index = tableName == "main2" ? j + 1 : j;
-
                     row[columnNames[j]] = dataForStartCondition[i][j_index];
                 }
 
@@ -391,7 +398,24 @@ namespace lab1_dotnet_framework
             }
         }
 
-        ////сделать для 3х параметров
+        private void addDataToDerivativeTable(List<string> startCondition)
+        {
+            string tableName = "main2der";
+            List<List<string>> dataForStartConditionDer = db.GetDataForStartCondition(tableName, startCondition);
+
+            for (int i = 0; i < dataForStartConditionDer.Count; i++)
+            {
+                DataRow row = table2.NewRow();
+
+                for (int j = 0; j < columnNamesForDerivative.Count; j++)
+                {
+                    row[columnNamesForDerivative[j]] = dataForStartConditionDer[i][j + 1];
+                }
+
+                table2.Rows.Add(row);
+            }
+        }
+        
         List<string> stringConditionToList(string startConditionString) 
         {
             List<string> startCondition = new List<string>();
