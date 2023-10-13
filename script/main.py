@@ -422,7 +422,7 @@ if taskType == "test":
         if WC:
             cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C1i[i], C2i[i], ui[i], diff[i]]])
+                             hi[i], C2i[i], C1i[i], ui[i], diff[i]]])
         else:
             cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
@@ -434,7 +434,7 @@ elif taskType == "main1":
         if WC:
             cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C1i[i], C2i[i]]])
+                             hi[i], C2i[i], C1i[i]]])
         else:
             cursor.executemany("insert into main1 values(?,?,?,?,?,?,?,?,?,?,?)",
                            [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
@@ -446,7 +446,7 @@ else:
         if WC:
             cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[u2[i], x0, v0, i + 1, xi[i], u1[i], v2i[i], cntrl[i], olp[i],
-                             hi[i], C1i[i], C2i[i]]])
+                             hi[i], C2i[i], C1i[i]]])
         else:
             cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?)",
                            [[u2[i], x0, v0, i + 1, xi[i], u1[i], 0, 0, 0,

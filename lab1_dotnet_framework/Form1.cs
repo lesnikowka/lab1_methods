@@ -51,6 +51,39 @@ namespace lab1_dotnet_framework
             chart3.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                db = new DataBase("/../../../database/lab1.sqlite3");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
+
+
+            for (int i = 0; i < columnNames.Count - 2; i++)
+            {
+                table.Columns.Add(columnNames[i], typeof(string));
+            }
+
+            for (int i = 0; i < columnNamesForDerivative.Count; i++)
+            {
+                table2.Columns.Add(columnNamesForDerivative[i], typeof(string));
+            }
+
+            dataGridView1.DataSource = table;
+            dataGridView2.DataSource = table2;
+
+            showStartConditions("main1");
+
+            textBox8.Enabled = false;
+            textBox9.Enabled = false;
+            textBox10.Enabled = false;
+        }
+
         private int catchParams(ref double X0, ref double U0, ref double U0der, ref double startStep, ref double localPrecision, ref double boundPrecision, ref double integrationBound, ref int maxStepNumbers, ref bool withControl, ref double a, ref double b, ref double c)
         {
             string x0Text = pointsToCommas(textBox1.Text);
@@ -238,7 +271,7 @@ namespace lab1_dotnet_framework
 
         }
 
-        Tuple<double, double, double> createTuple(List<string> startCondition)
+        private Tuple<double, double, double> createTuple(List<string> startCondition)
         {
             double X0 = stringToDouble(startCondition[0]);
             double U0 = stringToDouble(startCondition[1]);
@@ -306,7 +339,7 @@ namespace lab1_dotnet_framework
             }
         }
 
-        double constant(double x0, double v0)
+        private double constant(double x0, double v0)
         {
             return v0 / Math.Exp(2 * x0);
         }
@@ -416,7 +449,7 @@ namespace lab1_dotnet_framework
             }
         }
         
-        List<string> stringConditionToList(string startConditionString) 
+        private List<string> stringConditionToList(string startConditionString) 
         {
             List<string> startCondition = new List<string>();
 
@@ -437,42 +470,14 @@ namespace lab1_dotnet_framework
             return startCondition;
         }
 
+        private string getInfo(List<string> table)
+        {
+            return "";
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.chart1.Series.Clear();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                db = new DataBase("/../../../database/lab1.sqlite3");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                this.Close();
-            }
-
-
-            for (int i = 0; i < columnNames.Count - 2; i++)
-            {
-                table.Columns.Add(columnNames[i], typeof(string));
-            }
-
-            for (int i = 0; i < columnNamesForDerivative.Count; i++)
-            {
-                table2.Columns.Add(columnNamesForDerivative[i], typeof(string));
-            }
-
-            dataGridView1.DataSource = table;
-            dataGridView2.DataSource = table2;
-
-            showStartConditions("main1");
-
-            textBox8.Enabled = false;
-            textBox9.Enabled = false;
-            textBox10.Enabled = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
