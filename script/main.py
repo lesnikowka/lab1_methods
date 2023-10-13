@@ -33,14 +33,14 @@ p = 4  # порядок метода
 hmin = 10 ** -5  # минимальный шаг(для метода с контролем погрешности)
 vMax = 10  # оценка для значения v( для адекватного предстваления функции решения)
 b = 2
-
 x0 = 0
 v0 = 3
 v0der = 0
 h = 0.01
-
 WC = True
 taskType = "test"
+
+maximum_derivative = 10**8
 
 
 def catchParamsFromCmd():
@@ -191,7 +191,7 @@ def RK4WC(x, v, h, Nmax, b, e, f, eps):
 
     for i in range(1, Nmax + 1):
         x, v, h = stepWithControl(x, v, h, f, eps)
-        if v > vMax:
+        if f(x, v) > maximum_derivative:
             xArr.append(x)
             vArr.append(v)
             return xArr, vArr
@@ -222,7 +222,7 @@ def RK4(x, v, h, Nmax, b, e, f):
 
     for i in range(1, Nmax + 1):
         x, v = methodStep(x, v, h, f)
-        if v > vMax:
+        if f(x, v) > maximum_derivative:
             xArr.append(x)
             vArr.append(v)
             return xArr, vArr
