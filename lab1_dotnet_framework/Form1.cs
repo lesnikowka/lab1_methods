@@ -490,13 +490,14 @@ namespace lab1_dotnet_framework
             double minHi = Convert.ToDouble(table.Rows[0].Field<string>("hi"));
             double maxOlp = 0;
             double maxuivi = 0;
+            double bxn = Convert.ToDouble(textBox7.Text) - Convert.ToDouble(table.Rows[table.Rows.Count - 1][1]);
 
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                C1sum += Convert.ToInt32(table.Rows[i].Field<string>("C1"));
-                C2sum += Convert.ToInt32(table.Rows[i].Field<string>("C2"));
+                C1sum += Convert.ToInt32(table.Rows[i][7]);
+                C2sum += Convert.ToInt32(table.Rows[i][8]);
 
-                double hitmp = Convert.ToDouble(table.Rows[i].Field<string>("hi"));
+                double hitmp = Convert.ToDouble(table.Rows[i][6]);
 
                 if (hitmp > maxHi)
                 {
@@ -509,9 +510,20 @@ namespace lab1_dotnet_framework
                     minHiXi = i;
                 }
 
-                double olptmp = Convert.ToDouble(table.Rows[i].Field<string>("olp"));
+                double olptmp = Convert.ToDouble(table.Rows[i][5]);
 
                 maxOlp = olptmp > maxOlp ? olptmp : maxOlp;
+
+                if (selectedTask == TaskType.Test)
+                {
+                    double uivitmp = Convert.ToDouble(table.Rows[i][10]);
+
+                    if (uivitmp > maxuivi)
+                    {
+                        maxuivi = uivitmp;
+                        maxuiviXi = i;
+                    }
+                }
             }
 
             return "";
