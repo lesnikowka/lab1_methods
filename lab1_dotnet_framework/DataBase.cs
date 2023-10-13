@@ -158,11 +158,22 @@ namespace lab1_dotnet_framework
 
             SqliteCommand command = connection.CreateCommand();
 
-            command.CommandText = "insert into " + table + " values(" + table + " ";
+            string sourceQuery = " from pars where tablename = " + "'" + table + "'" + " and x0 = " + parameters[1]
+                + " and u0 = " + parameters[2] + " and u0der = " + parameters[3] + ";";
+
+            command.CommandText = "delete " + sourceQuery;
+
+            command.ExecuteNonQuery();
+
+            command.CommandText = "insert into pars" + " values(" + "'" + table + "', ";
 
             for (int i = 0; i < parameters.Count; i++) 
             {
-                command.CommandText += parameters[i] + " ";
+                command.CommandText += parameters[i];
+                if (i != parameters.Count - 1)
+                {
+                    command.CommandText += ", ";
+                }
             }
 
             command.CommandText += ");";
@@ -177,8 +188,10 @@ namespace lab1_dotnet_framework
             SqliteConnection connection = GetConnection();
             SqliteCommand command = connection.CreateCommand();
 
-            command.CommandText = "select * from " + table + " where x0 = " + startCondition[0]
+            string sourceQuery = " from pars where tablename = " + "'" + table + "'" + " and x0 = " + startCondition[0]
                 + " and u0 = " + startCondition[1] + " and u0der = " + startCondition[2] + ";";
+
+            command.CommandText = "select * " + sourceQuery;
 
             SqliteDataReader reader = command.ExecuteReader();
             reader.Read();

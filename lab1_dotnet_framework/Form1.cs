@@ -189,6 +189,14 @@ namespace lab1_dotnet_framework
             drawGraphs(doubleConditionsToList(X0, U0, U0der));
 
             showStartConditions(tableName);
+
+            int cntrl = checkBox1.Checked ? 1 : 0;
+
+            db.SaveParameters(new List<string> { toStringPoint(X0), toStringPoint(U0), toStringPoint(U0der), toStringPoint(integrationBound),
+                toStringPoint(startStep), toStringPoint(localPrecision), toStringPoint(boundPrecision),
+                maxStepNumbers.ToString(), toStringPoint(a), toStringPoint(b), toStringPoint(c), cntrl.ToString()
+            }, tableName);
+
         }
 
         private string getTableString()
