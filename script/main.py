@@ -341,7 +341,7 @@ def stepForSystem(x, v1, v2, h, f1, f2, withControl=False):
         xi.append(xn)
         u1.append(vn1)
         u2.append(vn2)
-    return x, vn1, vn2
+    return xn, vn1, vn2
 
 
 def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):

@@ -393,7 +393,7 @@ namespace lab1_dotnet_framework
             {
                 for (int i = 0; i < data.Count; i++)
                 {
-                    mainSeries.Points.AddXY(stringToDouble(data[i][1]), stringToDouble(data[i][3]));
+                    mainSeries.Points.AddXY(stringToDouble(data[i][2]), stringToDouble(data[i][3]));
                 }
 
                 for (int i = 0; i < data.Count; i++)
