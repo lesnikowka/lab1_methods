@@ -462,20 +462,21 @@ namespace lab1_dotnet_framework
         private List<string> stringConditionToList(string startConditionString) 
         {
             List<string> startCondition = new List<string>();
-
             int commaIndex = startConditionString.IndexOf(',');
-
             startCondition.Add(startConditionString.Substring(0, commaIndex));
-            startCondition.Add(startConditionString.Substring(commaIndex + 2));
-
-            string cropped = startConditionString.Substring(commaIndex + 1);
-
+            string cropped = startConditionString.Substring(commaIndex + 2);
             int secondCommaIndex = cropped.IndexOf(",");
 
-            if (secondCommaIndex != -1)
-                startCondition.Add(startConditionString.Substring(secondCommaIndex + 2));
+            if (secondCommaIndex != -1) 
+            {
+                startCondition.Add(startConditionString.Substring(commaIndex + 2, secondCommaIndex));
+                startCondition.Add(startConditionString.Substring(commaIndex + secondCommaIndex + 4));
+            }
             else
+            {
+                startCondition.Add(startConditionString.Substring(commaIndex + 2));
                 startCondition.Add("0");
+            }
 
             return startCondition;
         }
