@@ -24,7 +24,7 @@ namespace lab1_dotnet_framework
     }
 
 
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private DataBase db = null;
         private DataTable table = new DataTable();
@@ -38,7 +38,7 @@ namespace lab1_dotnet_framework
         private TaskType selectedTask = TaskType.Main1;
         private string currentTableDB = "main1";
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -49,9 +49,29 @@ namespace lab1_dotnet_framework
             chart1.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
             chart2.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
             chart3.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
+
+            chart1.ChartAreas["ChartArea1"].AxisX.Title = "X";
+            chart1.ChartAreas["ChartArea1"].AxisY.Title = "U";
+
+            chart1.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
+            chart1.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+
+
+            chart2.ChartAreas["ChartArea1"].AxisX.Title = "X";
+            chart2.ChartAreas["ChartArea1"].AxisY.Title = "U'";
+
+            chart2.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
+            chart2.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+
+            chart3.ChartAreas["ChartArea1"].AxisX.Title = "U";
+            chart3.ChartAreas["ChartArea1"].AxisY.Title = "U'";
+
+            chart3.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
+            chart3.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             try
             {
@@ -174,7 +194,7 @@ namespace lab1_dotnet_framework
             Process methodProcess = new Process();
 
             infoStartProcess.WorkingDirectory = "C:\\Users\\lesni\\lab1_methods\\script";
-            infoStartProcess.FileName = "main.py";
+            infoStartProcess.FileName = "RK.py";
             infoStartProcess.Arguments = args;
             infoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;
 
@@ -198,7 +218,10 @@ namespace lab1_dotnet_framework
             }, tableName);
 
 
-            richTextBox1.Text = getInfo(table);
+            richTextBox1.Text = getInfo(table, cntrl == 1);
+
+            if (tableName == "main2")
+                richTextBox1.Text += "\n\nДля производной\n" + getInfo(table2, cntrl == 1);
         }
 
         private string getTableString()
@@ -481,33 +504,33 @@ namespace lab1_dotnet_framework
             return startCondition;
         }
 
-        private string getInfo(DataTable table)
+        private string getInfo(DataTable curTable, bool cntrl)
         {
-            if (table.Rows.Count == 0)
+            if (curTable.Rows.Count == 0)
             {
                 return "";
             }
 
-            int n = table.Rows.Count, C1sum = 0, C2sum = 0, maxHiXi = 0, minHiXi = 0, maxuiviXi = 0;
+            int n = curTable.Rows.Count, C1sum = 0, C2sum = 0, maxHiXi = 0, minHiXi = 0, maxuiviXi = 0;
 
             string s = table.Rows[0][6].ToString();
 
-            double maxHi = Convert.ToDouble(pointsToCommas(table.Rows[0][6].ToString()));
-            double minHi = Convert.ToDouble(pointsToCommas(table.Rows[0][6].ToString()));
+            double maxHi = Convert.ToDouble(pointsToCommas(curTable.Rows[0][6].ToString()));
+            double minHi = Convert.ToDouble(pointsToCommas(curTable.Rows[0][6].ToString()));
             double maxOlp = 0;
             double maxuivi = 0;
-            double bxn = Convert.ToDouble(pointsToCommas(textBox7.Text)) - Convert.ToDouble(pointsToCommas(table.Rows[table.Rows.Count - 1][1].ToString()));
+            double bxn = Convert.ToDouble(pointsToCommas(textBox7.Text)) - Convert.ToDouble(pointsToCommas(curTable.Rows[curTable.Rows.Count - 1][1].ToString()));
 
             string resultInfo = "";
 
-            for (int i = 0; i < table.Rows.Count; i++)
+            for (int i = 0; i < curTable.Rows.Count; i++)
             {
 
 
-                C1sum += Convert.ToInt32(table.Rows[i][7]);
-                C2sum += Convert.ToInt32(table.Rows[i][8]);
+                C1sum += Convert.ToInt32(curTable.Rows[i][7]);
+                C2sum += Convert.ToInt32(curTable.Rows[i][8]);
 
-                double hitmp = Convert.ToDouble(pointsToCommas(table.Rows[i][6].ToString()));
+                double hitmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][6].ToString()));
 
                 if (hitmp > maxHi)
                 {
@@ -520,13 +543,13 @@ namespace lab1_dotnet_framework
                     minHiXi = i;
                 }
 
-                double olptmp = Convert.ToDouble(pointsToCommas(table.Rows[i][5].ToString()));
+                double olptmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][5].ToString()));
 
                 maxOlp = olptmp > maxOlp ? olptmp : maxOlp;
 
                 if (selectedTask == TaskType.Test)
                 {
-                    double uivitmp = Convert.ToDouble(pointsToCommas(table.Rows[i][10].ToString()));
+                    double uivitmp = Convert.ToDouble(pointsToCommas(curTable.Rows[i][10].ToString()));
 
                     if (uivitmp > maxuivi)
                     {
@@ -537,12 +560,12 @@ namespace lab1_dotnet_framework
             }
 
             resultInfo += "n = " + n.ToString() + "\n"; 
-            resultInfo += "b - xn = " + bxn.ToString() + "\n"; 
-            resultInfo += "Макс. ОЛП = " + bxn.ToString() + "\n"; 
-            resultInfo += "Удвоений: " + C1sum.ToString() + "\n"; 
-            resultInfo += "Делений: " + C2sum.ToString() + "\n";
-            resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
-            resultInfo += "Максимальный шаг: " + maxHi.ToString() + " при x = " + maxHiXi.ToString() + "\n";
+            resultInfo += "b - xn = " + bxn.ToString() + "\n";
+            if(cntrl) resultInfo += "Макс. ОЛП = " + bxn.ToString() + "\n";
+            if (cntrl) resultInfo += "Удвоений: " + C2sum.ToString() + "\n";
+            if (cntrl) resultInfo += "Делений: " + C1sum.ToString() + "\n";
+            if (cntrl) resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
+            if (cntrl) resultInfo += "Максимальный шаг: " + maxHi.ToString() + " при x = " + maxHiXi.ToString() + "\n";
             
             if (selectedTask == TaskType.Test)
             {
@@ -690,7 +713,14 @@ namespace lab1_dotnet_framework
 
             showParameters(selectedCondition);
 
-            richTextBox1.Text = getInfo(table);
+            bool cntrl = checkBox1.Checked;
+
+            richTextBox1.Text = getInfo(table, cntrl);
+
+            if(selectedTask == TaskType.Main2)
+            {
+                richTextBox1.Text += "\n\nДля производной: \n" + getInfo(table2, cntrl);
+            }
 
         }
     }
