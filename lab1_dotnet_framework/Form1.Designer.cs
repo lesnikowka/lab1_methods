@@ -105,7 +105,7 @@
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(6, 3);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(1236, 496);
+            this.chart1.Size = new System.Drawing.Size(1219, 546);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
@@ -324,7 +324,7 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.comboBox1.Location = new System.Drawing.Point(491, 68);
+            this.comboBox1.Location = new System.Drawing.Point(512, 68);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(303, 28);
             this.comboBox1.TabIndex = 22;
@@ -346,14 +346,14 @@
             this.richTextBox1.Location = new System.Drawing.Point(32, 530);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(370, 130);
+            this.richTextBox1.Size = new System.Drawing.Size(370, 175);
             this.richTextBox1.TabIndex = 24;
-            this.richTextBox1.Text = "здесь текстбокс";
+            this.richTextBox1.Text = "";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(423, 68);
+            this.label10.Location = new System.Drawing.Point(435, 68);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(62, 20);
             this.label10.TabIndex = 25;
@@ -366,10 +366,10 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Location = new System.Drawing.Point(423, 99);
+            this.tabControl1.Location = new System.Drawing.Point(435, 115);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1256, 550);
+            this.tabControl1.Size = new System.Drawing.Size(1244, 605);
             this.tabControl1.TabIndex = 26;
             // 
             // tabPage1
@@ -378,7 +378,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1248, 517);
+            this.tabPage1.Size = new System.Drawing.Size(1236, 572);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "График решения";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -389,7 +389,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1248, 517);
+            this.tabPage2.Size = new System.Drawing.Size(1236, 572);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Таблица";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -402,7 +402,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1235, 504);
+            this.dataGridView1.Size = new System.Drawing.Size(1223, 554);
             this.dataGridView1.TabIndex = 0;
             // 
             // tabPage3
@@ -410,7 +410,7 @@
             this.tabPage3.Controls.Add(this.chart2);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1248, 517);
+            this.tabPage3.Size = new System.Drawing.Size(1236, 572);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Фазовый портрет";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -425,7 +425,7 @@
             this.chart2.Legends.Add(legend2);
             this.chart2.Location = new System.Drawing.Point(12, 10);
             this.chart2.Name = "chart2";
-            this.chart2.Size = new System.Drawing.Size(1222, 496);
+            this.chart2.Size = new System.Drawing.Size(1222, 537);
             this.chart2.TabIndex = 1;
             this.chart2.Text = "chart2";
             // 
@@ -434,7 +434,7 @@
             this.tabPage4.Controls.Add(this.chart3);
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1248, 517);
+            this.tabPage4.Size = new System.Drawing.Size(1236, 572);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "График первой производной";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -449,7 +449,7 @@
             this.chart3.Legends.Add(legend3);
             this.chart3.Location = new System.Drawing.Point(12, 10);
             this.chart3.Name = "chart3";
-            this.chart3.Size = new System.Drawing.Size(1222, 496);
+            this.chart3.Size = new System.Drawing.Size(1204, 538);
             this.chart3.TabIndex = 1;
             this.chart3.Text = "chart3";
             // 
@@ -458,7 +458,7 @@
             this.tabPage5.Controls.Add(this.dataGridView2);
             this.tabPage5.Location = new System.Drawing.Point(4, 29);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1248, 517);
+            this.tabPage5.Size = new System.Drawing.Size(1236, 572);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Таблица для производной";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -471,7 +471,7 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 62;
             this.dataGridView2.RowTemplate.Height = 28;
-            this.dataGridView2.Size = new System.Drawing.Size(1242, 511);
+            this.dataGridView2.Size = new System.Drawing.Size(1230, 566);
             this.dataGridView2.TabIndex = 0;
             // 
             // label11
@@ -547,7 +547,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1691, 672);
+            this.ClientSize = new System.Drawing.Size(1691, 732);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.textBox11);
             this.Controls.Add(this.textBox10);

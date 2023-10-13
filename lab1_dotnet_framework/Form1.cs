@@ -197,6 +197,8 @@ namespace lab1_dotnet_framework
                 maxStepNumbers.ToString(), toStringPoint(a), toStringPoint(b), toStringPoint(c), cntrl.ToString()
             }, tableName);
 
+
+            richTextBox1.Text = getInfo(table);
         }
 
         private string getTableString()
@@ -486,18 +488,25 @@ namespace lab1_dotnet_framework
             }
 
             int n = table.Rows.Count, C1sum = 0, C2sum = 0, maxHiXi = 0, minHiXi = 0, maxuiviXi = 0;
-            double maxHi = Convert.ToDouble(table.Rows[0].Field<string>("hi"));
-            double minHi = Convert.ToDouble(table.Rows[0].Field<string>("hi"));
+
+            string s = table.Rows[0][6].ToString();
+
+            double maxHi = Convert.ToDouble(pointsToCommas(table.Rows[0][6].ToString()));
+            double minHi = Convert.ToDouble(pointsToCommas(table.Rows[0][6].ToString()));
             double maxOlp = 0;
             double maxuivi = 0;
-            double bxn = Convert.ToDouble(textBox7.Text) - Convert.ToDouble(table.Rows[table.Rows.Count - 1][1]);
+            double bxn = Convert.ToDouble(pointsToCommas(textBox7.Text)) - Convert.ToDouble(pointsToCommas(table.Rows[table.Rows.Count - 1][1].ToString()));
+
+            string resultInfo = "";
 
             for (int i = 0; i < table.Rows.Count; i++)
             {
+
+
                 C1sum += Convert.ToInt32(table.Rows[i][7]);
                 C2sum += Convert.ToInt32(table.Rows[i][8]);
 
-                double hitmp = Convert.ToDouble(table.Rows[i][6]);
+                double hitmp = Convert.ToDouble(pointsToCommas(table.Rows[i][6].ToString()));
 
                 if (hitmp > maxHi)
                 {
@@ -510,13 +519,13 @@ namespace lab1_dotnet_framework
                     minHiXi = i;
                 }
 
-                double olptmp = Convert.ToDouble(table.Rows[i][5]);
+                double olptmp = Convert.ToDouble(pointsToCommas(table.Rows[i][5].ToString()));
 
                 maxOlp = olptmp > maxOlp ? olptmp : maxOlp;
 
                 if (selectedTask == TaskType.Test)
                 {
-                    double uivitmp = Convert.ToDouble(table.Rows[i][10]);
+                    double uivitmp = Convert.ToDouble(pointsToCommas(table.Rows[i][10].ToString()));
 
                     if (uivitmp > maxuivi)
                     {
@@ -526,7 +535,20 @@ namespace lab1_dotnet_framework
                 }
             }
 
-            return "";
+            resultInfo += "n = " + n.ToString() + "\n"; 
+            resultInfo += "b - xn = " + bxn.ToString() + "\n"; 
+            resultInfo += "Макс. ОЛП = " + bxn.ToString() + "\n"; 
+            resultInfo += "Удвоений: " + C1sum.ToString() + "\n"; 
+            resultInfo += "Делений: " + C2sum.ToString() + "\n";
+            resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
+            resultInfo += "Максимальный шаг: " + maxHi.ToString() + " при x = " + maxHiXi.ToString() + "\n";
+            
+            if (selectedTask == TaskType.Test)
+            {
+                resultInfo += "Максимальный ui - vi: " + maxuivi.ToString() + " при x = " + maxuiviXi.ToString() + "\n";
+            }
+
+            return resultInfo;
         }
 
         private void showParameters(List<string> startCondition) 
@@ -662,6 +684,8 @@ namespace lab1_dotnet_framework
             drawGraphs(selectedCondition);
 
             showParameters(selectedCondition);
+
+            richTextBox1.Text = getInfo(table);
 
         }
     }
