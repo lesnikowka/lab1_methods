@@ -147,7 +147,8 @@ def saveToDatabase():
                                      h, 0, 0]])
 
     else:
-        cursor.execute("delete from main2 where x0=? and u0=?", [x0, v0])
+        cursor.execute("delete from main2 where x0=? and u0=? and u0der=?", [x0, v0, v0der])
+        cursor.execute("delete from main2der where x0=? and u0=? and u0der=?", [x0, v0, v0der])
         for i in range(len(xi)):
             if WC:
                 cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
