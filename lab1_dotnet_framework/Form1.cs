@@ -581,6 +581,10 @@ namespace lab1_dotnet_framework
         private void button1_Click(object sender, EventArgs e)
         {
             this.chart1.Series.Clear();
+            this.chart2.Series.Clear();
+            this.chart3.Series.Clear();
+            table.Clear();
+            table2.Clear();
         }
 
         private void button2_Click(object sender, EventArgs e)

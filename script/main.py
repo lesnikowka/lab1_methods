@@ -20,6 +20,8 @@ ui = []
 # + массивы для 2-го задания
 u1 = []
 u2 = []
+v22i = []
+cntrl2 = []
 
 A = 0
 B = 1
@@ -86,6 +88,8 @@ def eraseEndValues():
         u1[len(u1) - 1] = 0
     if (len(u2)):
         u2[len(u2) - 1] = 0
+    if (len(v22i)):
+        v22i[len(v22i) - 1] = 0
 
 
 def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
@@ -98,6 +102,19 @@ def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
     C1i.append(c1)
     C2i.append(c2)
     ui.append(un)
+
+def saveCurrentValuesSystem(S, xn, vn1, vn2, hn, v21n, v22n, cntrln1, cntrln2, c1, c2):
+    olp.append(S)
+    xi.append(xn)
+    u1.append(vn1)
+    u2.append(vn2)
+    hi.append(hn)
+    v2i.append(v21n)
+    v22i.append(v22n)
+    cntrl.append(cntrln1)
+    cntrl2.append(cntrln2)
+    C1i.append(c1)
+    C2i.append(c2)
 
 
 def saveToDatabase():
@@ -135,9 +152,16 @@ def saveToDatabase():
                 cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                                    [[u2[i], x0, v0, i + 1, xi[i], u1[i], v2i[i], cntrl[i], olp[i],
                                      hi[i], C2i[i], C1i[i], v0der]])
+
+                cursor.executemany("insert into main2der values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[u2[i], x0, v0, i + 1, xi[i], u2[i], v22i[i], cntrl2[i], olp[i],
+                                     hi[i], C2i[i], C1i[i], v0der]])
             else:
                 cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                                    [[u2[i], x0, v0, i + 1, xi[i], u1[i], 0, 0, 0,
+                                     h, 0, 0, v0der]])
+                cursor.executemany("insert into main2der values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                   [[u2[i], x0, v0, i + 1, xi[i], u2[i], 0, 0, 0,
                                      h, 0, 0, v0der]])
 
     connection.commit()
@@ -345,6 +369,7 @@ def stepForSystem(x, v1, v2, h, f1, f2, withControl=False):
 
 
 def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
+    global C1, C2
     xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2, True)
     xHalf, v1Half, v2Half = stepForSystem(x, v1, v2, h, f1, f2, True)
     xNext, v1Next, v2Next = stepForSystem(x, v1Half, v2Half, h, f1, f2, True)
@@ -354,28 +379,20 @@ def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
 
     S = max(abs(S1), abs(S2))
 
+    oldC1 = C1
+    oldC2 = C2
+
     if abs(S) >= eps / 2 ** (p + 1) and abs(S) <= eps:
-        olp.append(S1)
-        xi.append(xn)
-        u1.append(vn1)
-        u2.append(vn2)
-        hi.append(h)
-        v2i.append(v1Next)
-        cntrl.append(v1Next - vn1)
+        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
+
         return xn, vn1, vn2, h
     elif abs(S) < eps / 2 ** (p + 1):
-        olp.append(S1)
-        u1.append(vn1)
-        u2.append(vn2)
-        hi.append(h)
-        v2i.append(v1Next)
-        cntrl.append(v1Next - vn1)
-        global C1
         C1 += 1
+
+        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
         return xn, vn1, vn2, h * 2
     else:
         while abs(S) > eps:
-            global C2
             C2 += 1
             h /= 2
             xn, vn1, vn2 = stepForSystem(x, v1, v2, h, f1, f2, True)
@@ -384,13 +401,8 @@ def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
             S1 = (v1Next - vn1) / (2 ** p - 1)
             S2 = (v2Next - vn2) / (2 ** p - 1)
             S = max(abs(S1), abs(S2))
-        olp.append(S1)
-        xi.append(xn)
-        u1.append(vn1)
-        u2.append(vn2)
-        hi.append(h)
-        v2i.append(v1Next)
-        cntrl.append(v1Next - vn1)
+
+        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
         return xn, vn1, vn2, h
 
 
@@ -454,10 +466,17 @@ def RK4WCSys(x, v1, v2, h, Nmax, b, e, f1, f2, eps):
             v2Arr.append(v2)
             return xArr, v1Arr, v2Arr
         if x > b:
-            x, v1, v2 = stepForSystem(xArr[i - 1], v1Arr[i - 1], v2Arr[i - 1], b - xArr[i - 1], f1, f2)
+            x, v1, v2 = stepForSystem(xArr[i - 1], v1Arr[i - 1], v2Arr[i - 1], b - xArr[i - 1], f1, f2, True)
             xArr.append(x)
             v1Arr.append(v1)
             v2Arr.append(v2)
+
+            eraseEndValues()
+
+            xi[len(xi) - 1] = x
+            u1[len(u1) - 1] = v1
+            u2[len(u2) - 1] = v2
+
             return xArr, v1Arr, v2Arr
         xArr.append(x)
         v1Arr.append(v1)
