@@ -135,7 +135,7 @@ namespace lab1_dotnet_framework
                 X0 = Convert.ToDouble(x0Text);
                 U0 = Convert.ToDouble(u0Text);
                 startStep = Convert.ToDouble(startStepText);
-                localPrecision = Convert.ToDouble(boundPrecisionText);
+                localPrecision = Convert.ToDouble(localPrecisionText);
                 boundPrecision = Convert.ToDouble(boundPrecisionText);
                 maxStepNumbers = Convert.ToInt32(maxStepNumbersText);
                 integrationBound = Convert.ToDouble(integrationBoundText);
@@ -220,9 +220,6 @@ namespace lab1_dotnet_framework
 
 
             richTextBox1.Text = getInfo(table, cntrl == 1);
-
-            if (tableName == "main2")
-                richTextBox1.Text += "\n\nДля производной\n" + getInfo(table2, cntrl == 1);
         }
 
         private string getTableString()
@@ -561,6 +558,17 @@ namespace lab1_dotnet_framework
                 }
             }
 
+            if (selectedTask == TaskType.Test)
+            {
+                double uivitmp = Convert.ToDouble(curTable.Rows[curTable.Rows.Count - 1][10].ToString(), CultureInfo.InvariantCulture);
+
+                if (Math.Abs(uivitmp) > maxuivi)
+                {
+                    maxuivi = Math.Abs(uivitmp);
+                    maxuiviXi = curTable.Rows.Count;
+                }
+            }
+
             resultInfo += "n = " + n.ToString() + "\n"; 
             resultInfo += "b - xn = " + bxn.ToString() + "\n";
             if(cntrl) resultInfo += "Макс. ОЛП = " + maxOlp.ToString() + "\n";
@@ -718,11 +726,6 @@ namespace lab1_dotnet_framework
             bool cntrl = checkBox1.Checked;
 
             richTextBox1.Text = getInfo(table, cntrl);
-
-            if(selectedTask == TaskType.Main2)
-            {
-                richTextBox1.Text += "\n\nДля производной: \n" + getInfo(table2, cntrl);
-            }
 
         }
     }
