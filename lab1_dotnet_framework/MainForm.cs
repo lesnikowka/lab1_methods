@@ -47,32 +47,41 @@ namespace lab1_dotnet_framework
         {
             InitializeComponent();
 
-            chart1.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
-            chart2.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
-            chart3.ChartAreas["ChartArea1"].BackColor = Color.Transparent;
+            chart1.ChartAreas[0].BackColor = Color.Transparent;
+            chart2.ChartAreas[0].BackColor = Color.Transparent;
+            chart3.ChartAreas[0].BackColor = Color.Transparent;
 
-            chart1.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
-            chart2.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
-            chart3.ChartAreas["ChartArea1"].AxisX.LabelStyle.Format = "0.00001";
+            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.00001";
+            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.00001";
+            chart3.ChartAreas[0].AxisX.LabelStyle.Format = "0.00001";
 
-            chart1.ChartAreas["ChartArea1"].AxisX.Title = "X";
-            chart1.ChartAreas["ChartArea1"].AxisY.Title = "U";
+            chart1.ChartAreas[0].AxisX.Title = "X";
+            chart1.ChartAreas[0].AxisY.Title = "U";
 
-            chart1.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
-            chart1.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+            chart1.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 14);
+            chart1.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
 
 
-            chart2.ChartAreas["ChartArea1"].AxisX.Title = "X";
-            chart2.ChartAreas["ChartArea1"].AxisY.Title = "U'";
+            chart2.ChartAreas[0].AxisX.Title = "X";
+            chart2.ChartAreas[0].AxisY.Title = "U'";
 
-            chart2.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
-            chart2.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+            chart2.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 14);
+            chart2.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
 
-            chart3.ChartAreas["ChartArea1"].AxisX.Title = "U";
-            chart3.ChartAreas["ChartArea1"].AxisY.Title = "U'";
+            chart3.ChartAreas[0].AxisX.Title = "U";
+            chart3.ChartAreas[0].AxisY.Title = "U'";
 
-            chart3.ChartAreas["ChartArea1"].AxisX.TitleFont = new Font("Arial", 14);
-            chart3.ChartAreas["ChartArea1"].AxisY.TitleFont = new Font("Arial", 14);
+            chart3.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 14);
+            chart3.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
+
+            chart1.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chart1.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+
+            chart2.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chart2.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+
+            chart3.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chart3.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
 
         }
 
