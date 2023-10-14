@@ -14,6 +14,7 @@ using System.Numerics;
 using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Globalization;
+using System.IO;
 
 namespace lab1_dotnet_framework
 {
@@ -38,6 +39,9 @@ namespace lab1_dotnet_framework
 
         private TaskType selectedTask = TaskType.Main1;
         private string currentTableDB = "main1";
+
+        private string bdFolder = "/../../../database/lab1.sqlite3";
+        private string scriptFolder = "\\..\\..\\..\\script";
 
         public MainForm()
         {
@@ -76,7 +80,7 @@ namespace lab1_dotnet_framework
         {
             try
             {
-                db = new DataBase("/../../../database/lab1.sqlite3");
+                db = new DataBase(bdFolder);
             }
             catch (Exception ex)
             {
@@ -194,7 +198,7 @@ namespace lab1_dotnet_framework
 
             Process methodProcess = new Process();
 
-            infoStartProcess.WorkingDirectory = "C:\\Users\\lesni\\lab1_methods\\script";
+            infoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + scriptFolder;
             infoStartProcess.FileName = "RK.py";
             infoStartProcess.Arguments = args;
             infoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;

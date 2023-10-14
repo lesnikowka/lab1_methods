@@ -4,3 +4,4 @@ packages/
 .vs/
 obj/Debug
 obj/Debug/TempPE
+*.exe
