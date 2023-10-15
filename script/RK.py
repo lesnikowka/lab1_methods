@@ -22,6 +22,7 @@ u1 = []
 u2 = []
 v22i = []
 cntrl2 = []
+olp2 = []
 
 A = 0
 B = 1
@@ -104,8 +105,9 @@ def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
     ui.append(un)
 
 
-def saveCurrentValuesSystem(S, xn, vn1, vn2, hn, v21n, v22n, cntrln1, cntrln2, c1, c2):
+def saveCurrentValuesSystem(S, S2, xn, vn1, vn2, hn, v21n, v22n, cntrln1, cntrln2, c1, c2):
     olp.append(abs(S))
+    olp2.append(abs(S2))
     xi.append(xn)
     u1.append(vn1)
     u2.append(vn2)
@@ -156,7 +158,7 @@ def saveToDatabase():
                                      hi[i], C2i[i], C1i[i], v0der]])
 
                 cursor.executemany("insert into main2der values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                                   [[u2[i], x0, v0, i + 1, xi[i], u2[i], v22i[i], cntrl2[i], olp[i],
+                                   [[u2[i], x0, v0, i + 1, xi[i], u2[i], v22i[i], cntrl2[i], olp2[i],
                                      hi[i], C2i[i], C1i[i], v0der]])
             else:
                 cursor.executemany("insert into main2 values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -385,13 +387,13 @@ def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
     oldC2 = C2
 
     if abs(S) >= eps / 2 ** (p + 1) and abs(S) <= eps:
-        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
+        saveCurrentValuesSystem(S1, S2, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
 
         return xn, vn1, vn2, h
     elif abs(S) < eps / 2 ** (p + 1):
         C1 += 1
 
-        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
+        saveCurrentValuesSystem(S1, S2, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
         return xn, vn1, vn2, h * 2
     else:
         while abs(S) > eps:
@@ -404,7 +406,7 @@ def stepForSystemWithControl(x, v1, v2, h, f1, f2, eps):
             S2 = (v2Next - vn2) / (2 ** p - 1)
             S = max(abs(S1), abs(S2))
 
-        saveCurrentValuesSystem(S, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
+        saveCurrentValuesSystem(S1, S2, xn, vn1, vn2, h, v1Next, v2Next, v1Next - vn1, v2Next - vn2, C1 - oldC1, C2 - oldC2)
         return xn, vn1, vn2, h
 
 
