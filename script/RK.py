@@ -93,27 +93,27 @@ def eraseEndValues():
 
 
 def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
-    olp.append(S)
+    olp.append(abs(S))
     xi.append(xn)
     vi.append(vn)
     hi.append(hn)
     v2i.append(v2n)
-    cntrl.append(cntrln)
+    cntrl.append(abs(cntrln))
     C1i.append(c1)
     C2i.append(c2)
     ui.append(un)
 
 
 def saveCurrentValuesSystem(S, xn, vn1, vn2, hn, v21n, v22n, cntrln1, cntrln2, c1, c2):
-    olp.append(S)
+    olp.append(abs(S))
     xi.append(xn)
     u1.append(vn1)
     u2.append(vn2)
     hi.append(hn)
     v2i.append(v21n)
     v22i.append(v22n)
-    cntrl.append(cntrln1)
-    cntrl2.append(cntrln2)
+    cntrl.append(abs(cntrln1))
+    cntrl2.append(abs(cntrln2))
     C1i.append(c1)
     C2i.append(c2)
 

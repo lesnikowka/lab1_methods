@@ -32,8 +32,8 @@ namespace lab1_dotnet_framework
         private DataTable table = new DataTable();
         private DataTable table2 = new DataTable();
 
-        private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "vi-v2i", "olp", "hi", "c1", "c2", "u", "u-v" };
-        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "v'i", "v'2i", "v'i-v'2i", "olp", "hi", "c1", "c2" };
+        private List<string> columnNames = new List<string> { "id", "xi", "vi", "v2i", "|vi-v2i|", "|olp|", "hi", "Делений", "Удвоений", "u", "|u-v|" };
+        private List<string> columnNamesForDerivative = new List<string> { "id", "xi", "v'i", "v'2i", "|v'i-v'2i|", "|olp|", "hi", "Делений", "Удвоений" };
 
         private Dictionary<Tuple<double, double, double>, List<Series>> SeriesForStartConditions = new Dictionary<Tuple<double, double, double>, List<Series>>();
 
@@ -76,13 +76,18 @@ namespace lab1_dotnet_framework
 
             chart1.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
             chart1.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chart1.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
+            chart1.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
 
             chart2.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
             chart2.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chart2.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
+            chart2.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
 
             chart3.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
             chart3.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
-
+            chart3.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
+            chart3.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -568,17 +573,6 @@ namespace lab1_dotnet_framework
                         maxuivi = Math.Abs(uivitmp);
                         maxuiviXi = i + 1;
                     }
-                }
-            }
-
-            if (selectedTask == TaskType.Test)
-            {
-                double uivitmp = Convert.ToDouble(curTable.Rows[curTable.Rows.Count - 1][10].ToString(), CultureInfo.InvariantCulture);
-
-                if (Math.Abs(uivitmp) > maxuivi)
-                {
-                    maxuivi = Math.Abs(uivitmp);
-                    maxuiviXi = curTable.Rows.Count;
                 }
             }
 
