@@ -540,7 +540,7 @@ namespace lab1_dotnet_framework
 
             string resultInfo = "";
 
-            for (int i = 0; i < curTable.Rows.Count - 1; i++)
+            for (int i = 0; i < curTable.Rows.Count; i++)
             {
 
 
@@ -641,10 +641,10 @@ namespace lab1_dotnet_framework
             this.chart2.Series.Clear();
             this.chart3.Series.Clear();
 
-            if (!table.Columns.Contains("u") && !table.Columns.Contains("u-v"))
+            if (!table.Columns.Contains("u") && !table.Columns.Contains("|u-v|"))
             {
                 table.Columns.Add("u", typeof(string));
-                table.Columns.Add("u-v", typeof(string));
+                table.Columns.Add("|u-v|", typeof(string));
             }
 
             table.Rows.Clear();
@@ -669,10 +669,10 @@ namespace lab1_dotnet_framework
             this.chart2.Series.Clear();
             this.chart3.Series.Clear();
 
-            if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
+            if (table.Columns.Contains("u") && table.Columns.Contains("|u-v|"))
             {
                 table.Columns.Remove("u");
-                table.Columns.Remove("u-v");
+                table.Columns.Remove("|u-v|");
             }
 
 
@@ -685,8 +685,7 @@ namespace lab1_dotnet_framework
             textBox8.Enabled = false;
             textBox9.Enabled = false;
             textBox10.Enabled = false;
-            textBox11.Enabled = false;  
-
+            textBox11.Enabled = false;
         }
         private void основная2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -696,10 +695,10 @@ namespace lab1_dotnet_framework
             this.chart2.Series.Clear();
             this.chart3.Series.Clear();
 
-            if (table.Columns.Contains("u") && table.Columns.Contains("u-v"))
+            if (table.Columns.Contains("u") && table.Columns.Contains("|u-v|"))
             {
                 table.Columns.Remove("u");
-                table.Columns.Remove("u-v");
+                table.Columns.Remove("|u-v|");
             }
 
 

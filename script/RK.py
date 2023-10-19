@@ -40,7 +40,6 @@ v0der = 0
 h = 0.01
 WC = True
 taskType = "test"
-
 maximum_derivative = 10 ** 8
 
 
@@ -302,6 +301,9 @@ def RK4WC(x, v, h, Nmax, b, e, f, eps):
             eraseEndValues()
             xi[len(xi) - 1] = x
             vi[len(xi) - 1] = v
+            ui[len(ui) - 1] = decision(x, Const(x0, v0))
+            hi[len(hi) - 1] = b - xArr[i - 1]
+            over_bound = True
             return xArr, vArr
         xArr.append(x)
         vArr.append(v)
@@ -332,6 +334,9 @@ def RK4(x, v, h, Nmax, b, e, f):
             eraseEndValues()
             xi[len(xi) - 1] = x
             vi[len(xi) - 1] = v
+            ui[len(ui) - 1] = decision(x, Const(x0, v0))
+            hi[len(hi) - 1] = b - xArr[i-1]
+            over_bound = True
             return xArr, vArr
         xArr.append(x)
         vArr.append(v)
@@ -436,6 +441,13 @@ def RK4Sys(x, v1, v2, h, Nmax, b, e, f1, f2):
             xArr.append(x)
             v1Arr.append(v1)
             v2Arr.append(v2)
+            eraseEndValues()
+            xi[len(xi) - 1] = x
+            u1[len(u1) - 1] = v1
+            u2[len(u2) - 1] = v2
+            hi[len(hi) - 1] = b - xArr[i - 1]
+            over_bound = True
+
             return xArr, v1Arr, v2Arr
         xArr.append(x)
         v1Arr.append(v1)
@@ -474,12 +486,12 @@ def RK4WCSys(x, v1, v2, h, Nmax, b, e, f1, f2, eps):
             xArr.append(x)
             v1Arr.append(v1)
             v2Arr.append(v2)
-
             eraseEndValues()
-
             xi[len(xi) - 1] = x
             u1[len(u1) - 1] = v1
             u2[len(u2) - 1] = v2
+            hi[len(hi) - 1] = b - xArr[i - 1]
+            over_bound = True
 
             return xArr, v1Arr, v2Arr
         xArr.append(x)
