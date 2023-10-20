@@ -40,8 +40,8 @@ namespace lab1_dotnet_framework
         private TaskType selectedTask = TaskType.Main1;
         private string currentTableDB = "main1";
 
-        private string bdFolder = "/../../../database/lab1.sqlite3";
-        private string scriptFolder = "\\..\\..\\..\\script";
+        private string bdFolder = "/database/lab1.sqlite3";
+        private string scriptFolder = "\\script";
 
         public MainForm()
         {
@@ -88,6 +88,7 @@ namespace lab1_dotnet_framework
             chart3.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
             chart3.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
             chart3.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -115,6 +116,12 @@ namespace lab1_dotnet_framework
 
             dataGridView1.DataSource = table;
             dataGridView2.DataSource = table2;
+
+            dataGridView1.Columns["|olp|"].Width = 200; 
+            dataGridView1.Columns["|vi-v2i|"].Width = 200; 
+            dataGridView1.Columns["id"].Width = 50; 
+            dataGridView1.Columns["Делений"].Width = 95; 
+            dataGridView1.Columns["Удвоений"].Width = 95; 
 
             showStartConditions("main1");
 
@@ -645,6 +652,8 @@ namespace lab1_dotnet_framework
             {
                 table.Columns.Add("u", typeof(string));
                 table.Columns.Add("|u-v|", typeof(string));
+
+                dataGridView1.Columns["|u-v|"].Width = 200;
             }
 
             table.Rows.Clear();
