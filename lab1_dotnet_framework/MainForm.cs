@@ -121,7 +121,13 @@ namespace lab1_dotnet_framework
             dataGridView1.Columns["|vi-v2i|"].Width = 200; 
             dataGridView1.Columns["id"].Width = 50; 
             dataGridView1.Columns["Делений"].Width = 95; 
-            dataGridView1.Columns["Удвоений"].Width = 95; 
+            dataGridView1.Columns["Удвоений"].Width = 95;
+
+            dataGridView2.Columns["|olp|"].Width = 200;
+            dataGridView2.Columns["|v'i-v'2i|"].Width = 200;
+            dataGridView2.Columns["id"].Width = 50;
+            dataGridView2.Columns["Делений"].Width = 95;
+            dataGridView2.Columns["Удвоений"].Width = 95;
 
             showStartConditions("main1");
 
