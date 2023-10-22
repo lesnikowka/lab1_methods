@@ -251,6 +251,11 @@ namespace lab1_dotnet_framework
 
 
             richTextBox1.Text = getInfo(table, cntrl == 1);
+
+            if (selectedTask == TaskType.Main2)
+            {
+                richTextBox1.Text += "\nДля производной:\n" + getInfo(table2, cntrl == 1, true);
+            }
         }
 
         private string getTableString()
@@ -533,7 +538,7 @@ namespace lab1_dotnet_framework
             return startCondition;
         }
 
-        private string getInfo(DataTable curTable, bool cntrl)
+        private string getInfo(DataTable curTable, bool cntrl, bool onlyOlp = false)
         {
             if (curTable.Rows.Count == 0)
             {
@@ -589,13 +594,13 @@ namespace lab1_dotnet_framework
                 }
             }
 
-            resultInfo += "n = " + n.ToString() + "\n"; 
-            resultInfo += "b - xn = " + bxn.ToString() + "\n";
+            if(!onlyOlp) resultInfo += "n = " + n.ToString() + "\n";
+            if (!onlyOlp) resultInfo += "b - xn = " + bxn.ToString() + "\n";
             if(cntrl) resultInfo += "Макс. ОЛП = " + maxOlp.ToString() + "\n";
-            if (cntrl) resultInfo += "Удвоений: " + C2sum.ToString() + "\n";
-            if (cntrl) resultInfo += "Делений: " + C1sum.ToString() + "\n";
-            if (cntrl) resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
-            if (cntrl) resultInfo += "Максимальный шаг: " + maxHi.ToString() + " при x = " + maxHiXi.ToString() + "\n";
+            if (!onlyOlp) if (cntrl) resultInfo += "Удвоений: " + C2sum.ToString() + "\n";
+            if (!onlyOlp) if (cntrl) resultInfo += "Делений: " + C1sum.ToString() + "\n";
+            if (!onlyOlp) if (cntrl) resultInfo += "Минимальный шаг: " + minHi.ToString() + " при x = " + minHiXi.ToString() + "\n";
+            if (!onlyOlp) if (cntrl) resultInfo += "Максимальный шаг: " + maxHi.ToString() + " при x = " + maxHiXi.ToString() + "\n";
             
             if (selectedTask == TaskType.Test)
             {
@@ -748,6 +753,9 @@ namespace lab1_dotnet_framework
 
             richTextBox1.Text = getInfo(table, cntrl);
 
+            if (selectedTask == TaskType.Main2) {
+                richTextBox1.Text += "\nДля производной:\n" + getInfo(table2, cntrl, true); 
+            }
         }
     }
 }
