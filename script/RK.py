@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import matplotlib.pyplot as plt
 import sys
 import sqlite3
 import os
@@ -33,18 +32,18 @@ e = 0.0001  # погрешность выхода на границу
 p = 4  # порядок метода
 hmin = 10 ** -9  # минимальный шаг(для метода с контролем погрешности)
 vMax = 10  # оценка для значения v( для адекватного предстваления функции решения)
-b = 2
-x0 = 0
+b = 2 #граница
+x0 = 0 
 v0 = 3
-v0der = 0
+v0der = 0 
 h = 0.01
-WC = True
-taskType = "test"
-maximum_derivative = 10 ** 8
+WC = True #флаг для включения\отключения контроля ЛП
+taskType = "test" # выбранная задача
+maximum_derivative = 10 ** 8 # максимальная производная
 
 
 def catchParamsFromCmd():
-    global x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b
+    global x0, v0, h, Nmax, eps, e, WC, A, B, C, taskType, b, v0der
 
     if len(sys.argv) == 1:
         print("программа запущена со стандартными параметрами")
@@ -93,7 +92,7 @@ def eraseEndValues():
 
 
 def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
-    olp.append(abs(S))
+    olp.append(abs(S) * 2 ** p)
     xi.append(xn)
     vi.append(vn)
     hi.append(hn)
@@ -105,8 +104,8 @@ def saveCurrentValues(S, xn, vn, hn, v2n, cntrln, c1, c2, un):
 
 
 def saveCurrentValuesSystem(S, S2, xn, vn1, vn2, hn, v21n, v22n, cntrln1, cntrln2, c1, c2):
-    olp.append(abs(S))
-    olp2.append(abs(S2))
+    olp.append(abs(S) * 2 ** p)
+    olp2.append(abs(S2) * 2 ** p)
     xi.append(xn)
     u1.append(vn1)
     u2.append(vn2)
@@ -129,11 +128,11 @@ def saveToDatabase():
             if WC:
                 cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                                    [[x0, v0, i + 1, xi[i], vi[i], v2i[i], cntrl[i], olp[i],
-                                     hi[i], C2i[i], C1i[i], ui[i], ui[i] - vi[i]]])
+                                     hi[i], C2i[i], C1i[i], ui[i], abs(ui[i] - vi[i])]])
             else:
                 cursor.executemany("insert into test values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                                    [[x0, v0, i + 1, xi[i], vi[i], 0, 0, 0,
-                                     h, 0, 0, ui[i], ui[i] - vi[i]]])
+                                     h, 0, 0, ui[i], abs(ui[i] - vi[i])]])
 
     elif taskType == "main1":
         cursor.execute("delete from main1 where x0=? and u0=?", [x0, v0])

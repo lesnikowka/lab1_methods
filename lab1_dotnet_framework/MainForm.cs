@@ -62,14 +62,14 @@ namespace lab1_dotnet_framework
             chart1.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
 
 
-            chart2.ChartAreas[0].AxisX.Title = "X";
-            chart2.ChartAreas[0].AxisY.Title = "U'";
+            chart3.ChartAreas[0].AxisX.Title = "X";
+            chart3.ChartAreas[0].AxisY.Title = "U'";
 
             chart2.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 14);
             chart2.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
 
-            chart3.ChartAreas[0].AxisX.Title = "U";
-            chart3.ChartAreas[0].AxisY.Title = "U'";
+            chart2.ChartAreas[0].AxisX.Title = "U";
+            chart2.ChartAreas[0].AxisY.Title = "U'";
 
             chart3.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 14);
             chart3.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 14);
@@ -194,6 +194,20 @@ namespace lab1_dotnet_framework
         
         private void executeMethod()
         {
+            ProcessStartInfo deleteInfoStartProcess = new ProcessStartInfo();
+
+            Process deleteValuesProcess = new Process();
+
+            deleteInfoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + scriptFolder;
+            deleteInfoStartProcess.FileName = "clear_tables.py";
+            deleteInfoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;
+
+            deleteValuesProcess.StartInfo = deleteInfoStartProcess;
+
+            deleteValuesProcess.Start();
+
+            deleteValuesProcess.WaitForExit();
+
             double X0 = 0, U0 = 0, U0der = 0, startStep = 0, localPrecision = 0, boundPrecision = 0, integrationBound = 0, a = 0, b = 0, c = 0;
             int maxStepNumbers = 0;
             bool withControl = true;
