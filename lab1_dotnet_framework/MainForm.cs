@@ -40,8 +40,41 @@ namespace lab1_dotnet_framework
         private TaskType selectedTask = TaskType.Main1;
         private string currentTableDB = "main1";
 
-        private string bdFolder = "/database/lab1.sqlite3";
-        private string scriptFolder = "\\script";
+        private string bdFolder = "/../../../database/lab1.sqlite3";
+        private string scriptFolder = "\\..\\..\\..\\script";
+
+        private string bdFolderReserved = "/database/lab1.sqlite3";
+        private string scriptFolderReserved = "\\script";
+
+        public string getDBFolder()
+        { 
+            try
+            {
+                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + bdFolder);
+                sr.Close();
+            }
+            catch
+            {
+                return bdFolderReserved;
+            }
+
+            return bdFolder;
+        }
+
+        public string getScriptFolder()
+        {
+            try
+            {
+                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + scriptFolder + "/RK.py");
+                sr.Close();
+            }
+            catch
+            {
+                return scriptFolderReserved;
+            }
+
+            return scriptFolder;
+        }
 
         public MainForm()
         {
@@ -95,7 +128,7 @@ namespace lab1_dotnet_framework
         {
             try
             {
-                db = new DataBase(bdFolder);
+                db = new DataBase(getDBFolder());
             }
             catch (Exception ex)
             {
@@ -198,7 +231,7 @@ namespace lab1_dotnet_framework
 
             Process deleteValuesProcess = new Process();
 
-            deleteInfoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + scriptFolder;
+            deleteInfoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + getScriptFolder();
             deleteInfoStartProcess.FileName = "clear_tables.py";
             deleteInfoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;
 
@@ -239,7 +272,7 @@ namespace lab1_dotnet_framework
 
             Process methodProcess = new Process();
 
-            infoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + scriptFolder;
+            infoStartProcess.WorkingDirectory = Directory.GetCurrentDirectory() + getScriptFolder();
             infoStartProcess.FileName = "RK.py";
             infoStartProcess.Arguments = args;
             infoStartProcess.WindowStyle = ProcessWindowStyle.Hidden;
